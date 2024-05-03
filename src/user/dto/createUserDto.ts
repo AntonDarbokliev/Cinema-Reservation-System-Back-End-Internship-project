@@ -1,7 +1,7 @@
+import { Transform } from 'class-transformer';
 import {
   IsEmail,
   IsNotEmpty,
-  IsNumber,
   IsString,
   IsStrongPassword,
 } from 'class-validator';
@@ -25,6 +25,6 @@ export class CreateUserDto {
   password: string;
 
   @IsNotEmpty()
-  @IsNumber()
+  @Transform(({ value }) => parseInt(value, 10)) // Transform the string to a number
   role: number;
 }

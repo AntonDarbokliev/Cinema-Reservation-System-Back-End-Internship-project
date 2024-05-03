@@ -14,7 +14,7 @@ export class User {
   @Prop({ required: true, type: Date, default: now() })
   createdAt: Date;
 
-  @Prop({ required: true, type: String })
+  @Prop({ required: true, type: String, unique: true, index: true })
   email: string;
 
   @Prop({ required: true, type: String })
