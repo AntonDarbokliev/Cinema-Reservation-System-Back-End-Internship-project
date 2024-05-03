@@ -10,8 +10,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
         const uri = configService.get('DB_URI');
-        console.log('Connecting to ' + uri);
-
         return {
           uri,
         };
