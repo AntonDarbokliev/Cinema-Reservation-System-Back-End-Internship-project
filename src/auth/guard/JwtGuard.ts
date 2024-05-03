@@ -38,8 +38,11 @@ export class JwtGuard implements CanActivate {
     return true;
   }
 
-  extractTokenFromRequest(request: Request): string | undefined {
-    const [type, token] = request.headers['Authorization'].split(' ');
-    return type == 'Bearer' ? token : undefined;
+  extractTokenFromRequest(request: Request): string | null {
+    if (!request.headers['Authorization']) {
+      return null;
+    }
+    const [type, token] = request.headers['Authorization']?.split(' ');
+    return type == 'Bearer' ? token : null;
   }
 }

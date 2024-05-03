@@ -8,8 +8,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
   imports: [
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => {
-        const uri = configService.get('DB_URI');
+      useFactory: async (configService: ConfigService) => {
+        const uri = await configService.get('DB_URI');
         return {
           uri,
         };
