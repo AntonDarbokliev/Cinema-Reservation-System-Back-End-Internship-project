@@ -1,8 +1,9 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/user/dto';
 import { LoginUserDto } from 'src/user/dto/loginUserDto';
 import { Public } from './decorator';
+import { Role } from 'src/roles/role.enum';
 
 @Controller('auth')
 export class AuthController {
@@ -10,9 +11,17 @@ export class AuthController {
 
   @Public()
   @Post('register')
-  async register(@Body() createUserDto: CreateUserDto) {
+  async register(
+    @Body() createUserDto: CreateUserDto,
+    @Req() request: Request,
+  ) {
     try {
-      return await this.authService.register(createUserDto);
+      const url = request.url;
+
+      return await this.authService.register(
+        createUserDto,
+        url.includes('admin') ? [Role.ADMIN] : [Role.USER],
+      );
     } catch (error) {
       console.log(error);
     }
@@ -22,7 +31,34 @@ export class AuthController {
   @Post('login')
   async login(@Body() loginUserDto: LoginUserDto) {
     try {
-      return await this.authService.login(loginUserDto);
+      return await this.authService.login(loginUserDto, false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  @Public()
+  @Post('register/admin')
+  async registerAdmin(
+    @Body() createUserDto: CreateUserDto,
+    @Req() request: Request,
+  ) {
+    try {
+      const url = request.url;
+      return await this.authService.register(
+        createUserDto,
+        url.includes('admin') ? [Role.ADMIN] : [Role.USER],
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  @Public()
+  @Post('login/admin')
+  async loginAdmin(@Body() loginUserDto: LoginUserDto) {
+    try {
+      return await this.authService.login(loginUserDto, true);
     } catch (error) {
       console.log(error);
     }
