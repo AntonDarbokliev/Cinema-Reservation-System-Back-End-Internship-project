@@ -13,8 +13,8 @@ export class UserService {
     return createdUser;
   }
 
-  async findOne(email: string) {
-    return await this.userModel.findOne({ email: email });
+  async findOne(filterObject: object) {
+    return await this.userModel.findOne(filterObject);
   }
 
   async getAll() {

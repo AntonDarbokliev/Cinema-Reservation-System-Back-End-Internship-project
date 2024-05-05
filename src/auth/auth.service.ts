@@ -15,16 +15,14 @@ export class AuthService {
 
   async register(dto: CreateUserDto, roles: Role[]) {
     try {
-      const existingUser = await this.userService.findOne(dto.email);
+      const existingUser = await this.userService.findOne({ email: dto.email });
 
       if (existingUser) {
         throw new ForbiddenException('Credentials taken');
       }
 
-      const hashedPass = await bcrypt.hash(dto.password, 10);
       return await this.userService.createUser({
         ...dto,
-        password: hashedPass,
         roles,
       });
     } catch (error) {
@@ -34,7 +32,7 @@ export class AuthService {
 
   async login(dto: LoginUserDto, isAdminLogin: boolean) {
     try {
-      const user = await this.userService.findOne(dto.email);
+      const user = await this.userService.findOne({ email: dto.email });
 
       const isMatch = await bcrypt.compare(dto.password, user.password);
 
