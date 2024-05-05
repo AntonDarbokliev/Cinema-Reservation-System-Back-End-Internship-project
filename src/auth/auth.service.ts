@@ -4,6 +4,7 @@ import { CreateUserDto } from 'src/user/dto';
 import * as bcrypt from 'bcrypt';
 import { LoginUserDto } from 'src/user/dto/loginUserDto';
 import { JwtService } from '@nestjs/jwt';
+import { Role } from 'src/roles/role.enum';
 
 @Injectable()
 export class AuthService {
@@ -12,7 +13,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async register(dto: CreateUserDto) {
+  async register(dto: CreateUserDto, roles: Role[]) {
     try {
       const existingUser = await this.userService.findOne(dto.email);
 
@@ -24,24 +25,34 @@ export class AuthService {
       return await this.userService.createUser({
         ...dto,
         password: hashedPass,
+        roles,
       });
     } catch (error) {
       throw error;
     }
   }
 
-  async login(dto: LoginUserDto) {
+  async login(dto: LoginUserDto, isAdminLogin: boolean) {
     try {
       const user = await this.userService.findOne(dto.email);
 
       const isMatch = await bcrypt.compare(dto.password, user.password);
 
-      if (!isMatch) {
+      if (
+        !isMatch ||
+        (isAdminLogin && !user.roles.includes(Role.ADMIN)) ||
+        (!isAdminLogin && user.roles.includes(Role.ADMIN))
+      ) {
         throw new ForbiddenException('Invalid credentials');
       }
 
       return {
-        access_token: await this.jwtService.signAsync(dto),
+        access_token: await this.jwtService.signAsync({
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          roles: user.roles,
+        }),
       };
     } catch (error) {
       throw new ForbiddenException('Invalid credentials');
