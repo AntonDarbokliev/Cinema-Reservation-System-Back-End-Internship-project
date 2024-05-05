@@ -20,8 +20,8 @@ export class User {
   @Prop({ required: true, type: String })
   password: string;
 
-  @Prop({ required: true, type: Number, default: 1 })
-  role: number;
+  @Prop({ required: true, type: Array, default: 1 })
+  roles: number[];
 }
 
 export const userSchema = SchemaFactory.createForClass(User);

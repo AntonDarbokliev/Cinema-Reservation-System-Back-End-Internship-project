@@ -1,4 +1,4 @@
-import { Transform } from 'class-transformer';
+// import { Transform } from 'class-transformer';
 import {
   IsEmail,
   IsNotEmpty,
@@ -24,7 +24,6 @@ export class CreateUserDto {
   @IsStrongPassword({ minLength: 5, minUppercase: 1, minNumbers: 1 })
   password: string;
 
-  @IsNotEmpty()
-  @Transform(({ value }) => parseInt(value, 10)) // Transform the string to a number
-  role: number;
+  // @Transform(({ value }) => parseInt(value, 10)) // Transform the string to a number
+  roles: number[];
 }
