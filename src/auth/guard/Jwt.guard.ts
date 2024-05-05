@@ -7,6 +7,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { IS_PUBLIC_KEY } from '../decorator';
+import { extractTokenFromRequest } from '../utils';
 
 @Injectable()
 export class JwtGuard implements CanActivate {
@@ -24,7 +25,7 @@ export class JwtGuard implements CanActivate {
     if (isPublic) return true;
 
     const request = context.switchToHttp().getRequest();
-    const token = this.extractTokenFromRequest(request);
+    const token = extractTokenFromRequest(request);
 
     if (!token) {
       throw new UnauthorizedException();
@@ -36,13 +37,5 @@ export class JwtGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     return true;
-  }
-
-  extractTokenFromRequest(request: Request): string | null {
-    if (!request.headers['Authorization']) {
-      return null;
-    }
-    const [type, token] = request.headers['Authorization']?.split(' ');
-    return type == 'Bearer' ? token : null;
   }
 }

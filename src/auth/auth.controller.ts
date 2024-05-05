@@ -37,7 +37,6 @@ export class AuthController {
     }
   }
 
-  @Public()
   @Post('register/admin')
   async registerAdmin(
     @Body() createUserDto: CreateUserDto,
