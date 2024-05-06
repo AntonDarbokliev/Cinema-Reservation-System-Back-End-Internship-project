@@ -1,9 +1,10 @@
-import { Body, Controller, Post, Req } from '@nestjs/common';
+import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/user/dto';
 import { LoginUserDto } from 'src/user/dto/loginUserDto';
 import { Public } from './decorator';
 import { Role } from 'src/roles/role.enum';
+import { RootAdmin } from './guard';
 
 @Controller('auth')
 export class AuthController {
@@ -36,7 +37,7 @@ export class AuthController {
       console.log(error);
     }
   }
-
+  @UseGuards(RootAdmin)
   @Post('register/admin')
   async registerAdmin(
     @Body() createUserDto: CreateUserDto,

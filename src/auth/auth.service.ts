@@ -36,10 +36,11 @@ export class AuthService {
 
       const isMatch = await bcrypt.compare(dto.password, user.password);
 
+      const isUserAdmin = user.roles.some((role) => role <= Role.ADMIN);
       if (
         !isMatch ||
-        (isAdminLogin && !user.roles.includes(Role.ADMIN)) ||
-        (!isAdminLogin && user.roles.includes(Role.ADMIN))
+        (isAdminLogin && !isUserAdmin) ||
+        (!isAdminLogin && isUserAdmin)
       ) {
         throw new ForbiddenException('Invalid credentials');
       }
