@@ -3,6 +3,7 @@ import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { ROLES_KEY } from '../decorator/roles.decorator';
 import { JwtService } from '@nestjs/jwt';
+import { extractTokenFromRequest } from 'src/auth/utils';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -22,7 +23,8 @@ export class RolesGuard implements CanActivate {
       return true;
     }
 
-    const token = context.switchToHttp().getRequest().access_token;
+    const request = context.switchToHttp().getRequest();
+    const token = extractTokenFromRequest(request);
     const user = this.jwtService.decode(token);
 
     return requiredRoles.some((role: number) => user.roles.includes(role));

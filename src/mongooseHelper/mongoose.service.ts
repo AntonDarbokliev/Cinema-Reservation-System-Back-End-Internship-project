@@ -5,8 +5,6 @@ import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class MongooseHelperService implements OnApplicationBootstrap {
-  FIRST_ADMIN_EMAIL = 'admin@cinema.com';
-
   constructor(
     private userService: UserService,
     private configService: ConfigService,
@@ -18,7 +16,7 @@ export class MongooseHelperService implements OnApplicationBootstrap {
 
     if (!rootAdmin) {
       await this.userService.createUser({
-        email: this.FIRST_ADMIN_EMAIL,
+        email: this.configService.get('ROOT_ADMIN_EMAIL'),
         firstName: 'ROOT',
         lastName: 'ADMIN',
         password: this.configService.get('ROOT_ADMIN_PASSWORD'),
