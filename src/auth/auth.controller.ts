@@ -4,7 +4,8 @@ import { CreateUserDto } from 'src/user/dto';
 import { LoginUserDto } from 'src/user/dto/loginUserDto';
 import { Public } from './decorator';
 import { Role } from 'src/roles/role.enum';
-import { RootAdmin } from './guard';
+import { RolesGuard } from 'src/roles/guard';
+import { Roles } from 'src/roles/decorator/roles.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -12,19 +13,11 @@ export class AuthController {
 
   @Public()
   @Post('register')
-  async register(
-    @Body() createUserDto: CreateUserDto,
-    @Req() request: Request,
-  ) {
+  async register(@Body() createUserDto: CreateUserDto) {
     try {
-      const url = request.url;
-
-      return await this.authService.register(
-        createUserDto,
-        url.includes('admin') ? [Role.ADMIN] : [Role.USER],
-      );
+      return await this.authService.register(createUserDto, [Role.USER]);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
@@ -34,10 +27,12 @@ export class AuthController {
     try {
       return await this.authService.login(loginUserDto, false);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
-  @UseGuards(RootAdmin)
+
+  @UseGuards(RolesGuard)
+  @Roles([Role.ROOT_ADMIN])
   @Post('register/admin')
   async registerAdmin(
     @Body() createUserDto: CreateUserDto,
