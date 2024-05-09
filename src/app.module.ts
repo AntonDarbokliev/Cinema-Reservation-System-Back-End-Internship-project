@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
-import { MongooseHelperModule } from './mongooseHelper/mongoose.module';
-import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
-import { RolesModule } from './roles/roles.module';
+import { MongooseHelperModule } from './modules/mongooseHelper/mongoose.module';
+import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { RolesModule } from './modules/roles/roles.module';
 
 @Module({
   imports: [

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseHelperService } from './mongoose.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UserModule } from 'src/user/user.module';
+import { UserModule } from '../user/user.module';
 
 @Module({
   providers: [MongooseHelperService],
