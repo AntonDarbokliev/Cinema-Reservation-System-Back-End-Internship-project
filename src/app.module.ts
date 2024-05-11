@@ -5,6 +5,7 @@ import { MongooseHelperModule } from './modules/mongooseHelper/mongoose.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { RolesModule } from './modules/roles/roles.module';
+import { CinemaModule } from './modules/cinema/cinema.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { RolesModule } from './modules/roles/roles.module';
     UserModule,
     AuthModule,
     RolesModule,
+    CinemaModule,
   ],
   controllers: [AppController],
   providers: [],
