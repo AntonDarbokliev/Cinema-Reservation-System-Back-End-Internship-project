@@ -1,7 +1,7 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Role } from 'src/roles/role.enum';
-import { UserService } from 'src/user/user.service';
+import { Role } from '../roles/role.enum';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class MongooseHelperService implements OnApplicationBootstrap {
