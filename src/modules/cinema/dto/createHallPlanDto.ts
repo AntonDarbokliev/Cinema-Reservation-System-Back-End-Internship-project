@@ -5,6 +5,7 @@ enum SeatType {
 }
 
 interface Seat {
+  row: number;
   number: number;
   type: SeatType.SEAT_COMMON | SeatType.SEAT_VIP | SeatType.SEAT_COUPLES;
 }

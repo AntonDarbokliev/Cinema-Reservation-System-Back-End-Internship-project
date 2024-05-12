@@ -1,4 +1,11 @@
-import { IsArray, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsNumber,
+  // IsOptional,
+  IsString,
+  // ValidateNested,
+} from 'class-validator';
 import { CreateMenuItem, CreateHallPlan, CreateProjection } from './index';
 import { Transform } from 'class-transformer';
 
