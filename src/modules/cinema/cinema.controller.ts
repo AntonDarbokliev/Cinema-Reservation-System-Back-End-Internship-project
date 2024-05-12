@@ -12,13 +12,19 @@ import { CinemaService } from './cinema.service';
 import { Public } from '../auth/decorator';
 import { EditCinemaDto } from './dto/editCinemaDto';
 
-@Controller('cinema')
+@Controller('cinemas')
 export class CinemaController {
   constructor(private cinemaService: CinemaService) {}
 
   @Post()
   async addCinema(@Body() createCinemaDto: CreateCinemaDto) {
     return await this.cinemaService.createCinema(createCinemaDto);
+  }
+
+  @Public()
+  @Get()
+  async getAllCinemas() {
+    return await this.cinemaService.getAllCinemas();
   }
 
   @Public()

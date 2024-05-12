@@ -9,6 +9,10 @@ import { EditCinemaDto } from './dto/editCinemaDto';
 export class CinemaService {
   constructor(@InjectModel(Cinema.name) private cinemaModel: Model<Cinema>) {}
 
+  async getAllCinemas() {
+    return await this.cinemaModel.find();
+  }
+
   async getCinema(id: string) {
     return await this.cinemaModel.findById(id);
   }
