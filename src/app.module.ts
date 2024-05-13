@@ -6,6 +6,7 @@ import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { RolesModule } from './modules/roles/roles.module';
 import { CinemaModule } from './modules/cinema/cinema.module';
+import { HallModule } from './modules/hall/hall.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { CinemaModule } from './modules/cinema/cinema.module';
     AuthModule,
     RolesModule,
     CinemaModule,
+    HallModule,
   ],
   controllers: [AppController],
   providers: [],
