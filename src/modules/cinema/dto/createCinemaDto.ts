@@ -1,13 +1,5 @@
-import {
-  IsArray,
-  IsNotEmpty,
-  IsNumber,
-  // IsOptional,
-  IsString,
-  // ValidateNested,
-} from 'class-validator';
-import { CreateMenuItem, CreateHallPlan, CreateProjection } from './index';
-import { Transform } from 'class-transformer';
+import { IsArray, IsNotEmpty, IsString } from 'class-validator';
+import { CreateMenuItem, CreateProjection } from './index';
 
 export class CreateCinemaDto {
   @IsString()
@@ -18,13 +10,8 @@ export class CreateCinemaDto {
   @IsNotEmpty()
   name: string;
 
-  @Transform(({ value }) => parseInt(value))
-  @IsNumber()
-  @IsNotEmpty()
-  numberOfHalls: string;
-
   @IsArray()
-  hallPlans: CreateHallPlan[];
+  hallPlans: object[]; // Change to hall plan[] later
 
   @IsArray()
   menu: CreateMenuItem[];
