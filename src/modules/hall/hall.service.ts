@@ -15,4 +15,12 @@ export class HallService {
   async createHall(dto: CreateHallDto) {
     return await this.hallModel.create(dto);
   }
+
+  async updateHall(id: string, dto: CreateHallDto) {
+    return await this.hallModel.findByIdAndUpdate(id, dto, { new: true });
+  }
+
+  async deleteHall(id: string) {
+    return await this.hallModel.findByIdAndDelete(id);
+  }
 }

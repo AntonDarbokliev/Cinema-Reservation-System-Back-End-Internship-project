@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { HallService } from './hall.service';
 import { CreateHallDto } from './dto';
 
@@ -14,5 +22,15 @@ export class HallController {
   @Post()
   async createHall(@Body() hallDto: CreateHallDto) {
     return await this.hallService.createHall(hallDto);
+  }
+
+  @Patch(':id')
+  async updateHall(@Body() hallDto: CreateHallDto, @Param('id') id: string) {
+    return await this.hallService.updateHall(id, hallDto);
+  }
+
+  @Delete(':id')
+  async deleteHall(@Param() id: string) {
+    return await this.hallService.deleteHall(id);
   }
 }
