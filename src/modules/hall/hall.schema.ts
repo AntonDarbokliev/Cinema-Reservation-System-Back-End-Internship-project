@@ -15,25 +15,30 @@ export class Hall {
 
 export const hallSchema = SchemaFactory.createForClass(Hall);
 
-const setSeatCountInHall = (hall: Hall) => {
+const seatCountInHall = (hall: Hall) => {
   const totalHallSeats = hall.seatsLayout.reduce((acc, row) => {
     const rowLengthNoBlanks = row.filter(
       (s) => s.type !== SeatType.SEAT_BLANK,
     ).length;
     return (acc += rowLengthNoBlanks);
   }, 0);
-  hall.numberOfSeats = totalHallSeats;
+
+  return totalHallSeats;
 };
 
 hallSchema.pre('save', function (next) {
-  setSeatCountInHall(this);
+  const totalHallSeats = seatCountInHall(this);
+  this.numberOfSeats = totalHallSeats;
   next();
 });
 
-hallSchema.pre('updateOne', function (next) {
-  const updatedData: any = this.getUpdate();
-  if (updatedData.hasOwnProperty('hallPlans')) {
-    setSeatCountInHall(updatedData);
-  }
-  next();
+// Post (not pre) to ensure that the new seats have been added so we can count them.
+// Otherwise it would be one request behind, though it returns the old seat count, but still updates it correctly.
+hallSchema.post('findOneAndUpdate', async function () {
+  const data = await this.model.findOne(this.getQuery());
+
+  const totalHallSeats = seatCountInHall(data);
+  data.numberOfSeats = totalHallSeats;
+
+  await data.save();
 });
