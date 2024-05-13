@@ -5,7 +5,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { CreateMenuItem, CreateHallPlan, CreateProjection } from './index';
+import { CreateMenuItem, CreateProjection } from './index';
 import { Transform } from 'class-transformer';
 
 export class EditCinemaDto {
@@ -25,9 +25,9 @@ export class EditCinemaDto {
   @IsOptional()
   numberOfHalls?: string;
 
-  @IsArray()
-  @IsOptional()
-  hallPlans?: CreateHallPlan[];
+  // @IsArray()
+  // @IsOptional()
+  // hallPlans?: CreateHallPlan[];
 
   @IsArray()
   @IsOptional()
