@@ -15,8 +15,13 @@ export class HallController {
   constructor(private hallService: HallService) {}
 
   @Get()
-  async getHalls() {
-    return await this.hallService.getHalls();
+  async getAllHalls() {
+    return await this.hallService.getAllHalls();
+  }
+
+  @Get(':id')
+  async getHall(@Param() params: { id: string }) {
+    return await this.hallService.getHall(params.id);
   }
 
   @Post()

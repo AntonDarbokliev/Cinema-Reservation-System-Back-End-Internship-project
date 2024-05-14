@@ -8,8 +8,12 @@ import { CreateHallDto } from './dto';
 export class HallService {
   constructor(@InjectModel(Hall.name) private hallModel: Model<Hall>) {}
 
-  async getHalls() {
+  async getAllHalls() {
     return await this.hallModel.find();
+  }
+
+  async getHall(id: string) {
+    return await this.hallModel.findById(id);
   }
 
   async createHall(dto: CreateHallDto) {
