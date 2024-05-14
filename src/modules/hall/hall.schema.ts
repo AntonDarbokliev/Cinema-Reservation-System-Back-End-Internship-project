@@ -18,7 +18,7 @@ export const hallSchema = SchemaFactory.createForClass(Hall);
 const seatCountInHall = (hall: Hall) => {
   const totalHallSeats = hall.seatsLayout.reduce((acc, row) => {
     const rowLengthNoBlanks = row.filter(
-      (s) => s.type !== SeatType.SEAT_BLANK,
+      (s) => s !== SeatType.SEAT_BLANK,
     ).length;
     return (acc += rowLengthNoBlanks);
   }, 0);

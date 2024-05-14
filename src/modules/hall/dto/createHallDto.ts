@@ -7,15 +7,11 @@ export enum SeatType {
   SEAT_BLANK = 'blank',
 }
 
-export interface Seat {
-  row: number;
-  number: number;
-  type:
-    | SeatType.SEAT_COMMON
-    | SeatType.SEAT_VIP
-    | SeatType.SEAT_COUPLES
-    | SeatType.SEAT_BLANK;
-}
+export type Seat =
+  | SeatType.SEAT_COMMON
+  | SeatType.SEAT_VIP
+  | SeatType.SEAT_COUPLES
+  | SeatType.SEAT_BLANK;
 
 export class CreateHallDto {
   @IsArray()
