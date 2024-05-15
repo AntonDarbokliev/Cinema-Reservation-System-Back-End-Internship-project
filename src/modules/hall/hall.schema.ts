@@ -1,30 +1,50 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Seat, SeatType } from './dto';
+import { SeatType } from './dto';
 import { HydratedDocument } from 'mongoose';
+// import { v4 as uuidv4 } from 'uuid';
 
 export type CinemaDocument = HydratedDocument<Hall>;
 
 @Schema()
+export class Seat {
+  @Prop({ type: String, required: true })
+  type: SeatType;
+}
+@Schema()
+export class Row {
+  @Prop({ type: Array(Seat) })
+  seats: Seat[];
+}
+
+@Schema()
 export class Hall {
-  @Prop({ required: true, type: Array })
-  seatsLayout: Seat[][];
+  @Prop({ required: true, type: Array(Row) })
+  seatsLayout: Row[];
 
   @Prop({ type: Number })
   numberOfSeats: number;
 }
-
+export const seatSchema = SchemaFactory.createForClass(Seat);
+export const rowSchema = SchemaFactory.createForClass(Row);
 export const hallSchema = SchemaFactory.createForClass(Hall);
 
 const seatCountInHall = (hall: Hall) => {
   const totalHallSeats = hall.seatsLayout.reduce((acc, row) => {
-    const rowLengthNoBlanks = row.filter(
-      (s) => s !== SeatType.SEAT_BLANK,
+    const rowLengthNoBlanks = row.seats.filter(
+      (s) => s.type !== SeatType.SEAT_BLANK,
     ).length;
     return (acc += rowLengthNoBlanks);
   }, 0);
 
   return totalHallSeats;
 };
+
+// const giveEachRowAndSeatId = (hall: Hall) => {
+//   hall.seatsLayout.forEach((row) => (row.id = uuidv4()));
+//   hall.seatsLayout.forEach((row) =>
+//     row.seats.forEach((seat) => (seat.id = uuidv4())),
+//   );
+// };
 
 hallSchema.pre('save', function (next) {
   const totalHallSeats = seatCountInHall(this);
@@ -35,10 +55,13 @@ hallSchema.pre('save', function (next) {
 // Post (not pre) to ensure that the new seats have been added so we can count them.
 // Otherwise it would be one request behind, though it returns the old seat count, but still updates it correctly.
 hallSchema.post('findOneAndUpdate', async function () {
-  const data = await this.model.findOne(this.getQuery());
+  const hall = await this.model.findOne(this.getQuery());
 
-  const totalHallSeats = seatCountInHall(data);
-  data.numberOfSeats = totalHallSeats;
+  const totalHallSeats = seatCountInHall(hall);
+  // giveEachRowAndSeatId(hall);
+  hall.numberOfSeats = totalHallSeats;
+  // console.log('Hall update: ', hall);
+  // console.log('Updated seats in hall: ', hall.seatsLayout[0]);
 
-  await data.save();
+  await hall.save();
 });
