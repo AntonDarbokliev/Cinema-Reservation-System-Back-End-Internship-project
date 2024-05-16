@@ -3,10 +3,15 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Hall } from './hall.schema';
 import { Model } from 'mongoose';
 import { CreateHallDto } from './dto';
+import { Cinema } from '../cinema/cinema.schema';
+import { EditHallDto } from './dto/editHallDto';
 
 @Injectable()
 export class HallService {
-  constructor(@InjectModel(Hall.name) private hallModel: Model<Hall>) {}
+  constructor(
+    @InjectModel(Hall.name) private hallModel: Model<Hall>,
+    @InjectModel(Cinema.name) private cinemaModel: Model<Cinema>,
+  ) {}
 
   async getAllHalls() {
     return await this.hallModel.find();
@@ -17,10 +22,14 @@ export class HallService {
   }
 
   async createHall(dto: CreateHallDto) {
-    return await this.hallModel.create(dto);
+    const newHall = await this.hallModel.create(dto);
+    await this.cinemaModel.findByIdAndUpdate(dto.cinemaId, {
+      $push: { halls: newHall._id },
+    });
+    return newHall;
   }
 
-  async updateHall(id: string, dto: CreateHallDto) {
+  async updateHall(id: string, dto: EditHallDto) {
     return await this.hallModel.findByIdAndUpdate(id, dto, { new: true });
   }
 
