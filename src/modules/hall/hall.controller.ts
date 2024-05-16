@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { HallService } from './hall.service';
 import { CreateHallDto } from './dto';
+import { EditHallDto } from './dto/editHallDto';
 
 @Controller('halls')
 export class HallController {
@@ -30,7 +31,7 @@ export class HallController {
   }
 
   @Patch(':id')
-  async updateHall(@Body() hallDto: CreateHallDto, @Param('id') id: string) {
+  async updateHall(@Body() hallDto: EditHallDto, @Param('id') id: string) {
     return await this.hallService.updateHall(id, hallDto);
   }
 
