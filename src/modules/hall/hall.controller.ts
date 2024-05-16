@@ -34,8 +34,11 @@ export class HallController {
     return await this.hallService.updateHall(id, hallDto);
   }
 
-  @Delete(':id')
-  async deleteHall(@Param() id: string) {
-    return await this.hallService.deleteHall(id);
+  @Delete(':hallId/:rowId')
+  async deleteHall(
+    @Param('hallId') hallId: string,
+    @Param('rowId') rowId: string,
+  ) {
+    return await this.hallService.deleteRow(hallId, rowId);
   }
 }
