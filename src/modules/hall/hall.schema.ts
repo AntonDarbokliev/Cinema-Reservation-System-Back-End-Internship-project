@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { SeatType } from './dto';
 import { HydratedDocument } from 'mongoose';
-// import { v4 as uuidv4 } from 'uuid';
 
 export type CinemaDocument = HydratedDocument<Hall>;
 
@@ -14,6 +13,7 @@ export class Seat {
 export class Row {
   @Prop({ type: Array(Seat) })
   seats: Seat[];
+  _id: string;
 }
 
 @Schema()
@@ -39,13 +39,6 @@ const seatCountInHall = (hall: Hall) => {
   return totalHallSeats;
 };
 
-// const giveEachRowAndSeatId = (hall: Hall) => {
-//   hall.seatsLayout.forEach((row) => (row.id = uuidv4()));
-//   hall.seatsLayout.forEach((row) =>
-//     row.seats.forEach((seat) => (seat.id = uuidv4())),
-//   );
-// };
-
 hallSchema.pre('save', function (next) {
   const totalHallSeats = seatCountInHall(this);
   this.numberOfSeats = totalHallSeats;
@@ -58,10 +51,7 @@ hallSchema.post('findOneAndUpdate', async function () {
   const hall = await this.model.findOne(this.getQuery());
 
   const totalHallSeats = seatCountInHall(hall);
-  // giveEachRowAndSeatId(hall);
   hall.numberOfSeats = totalHallSeats;
-  // console.log('Hall update: ', hall);
-  // console.log('Updated seats in hall: ', hall.seatsLayout[0]);
 
   await hall.save();
 });
