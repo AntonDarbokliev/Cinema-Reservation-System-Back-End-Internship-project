@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { CreateProjection, CreateMenuItem } from './dto/index';
-import { HydratedDocument } from 'mongoose';
+import mongoose, { HydratedDocument } from 'mongoose';
+import { Hall } from '../hall/hall.schema';
 
 export type CinemaDocument = HydratedDocument<Cinema>;
 
@@ -20,12 +21,15 @@ export class Cinema {
 
   @Prop({ required: true, type: Array })
   projections: CreateProjection[];
+
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Hall' }] })
+  halls: Hall[];
 }
 
 export const cinemaSchema = SchemaFactory.createForClass(Cinema);
 
 cinemaSchema.pre('save', function (next) {
-  // this.numberOfHalls = this.hallPlans.length;
+  this.numberOfHalls = this.halls.length;
   next();
 });
 

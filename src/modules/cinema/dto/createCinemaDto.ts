@@ -10,8 +10,8 @@ export class CreateCinemaDto {
   @IsNotEmpty()
   name: string;
 
-  @IsArray()
-  hallPlans: object[]; // Change to hall plan[] later
+  // @IsArray()
+  // hallPlans: object[]; // Change to hall plan[] later
 
   @IsArray()
   menu: CreateMenuItem[];
