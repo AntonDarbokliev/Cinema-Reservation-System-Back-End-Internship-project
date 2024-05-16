@@ -15,7 +15,6 @@ export class CinemaService {
 
   async getCinema(id: string) {
     const cinema = await this.cinemaModel.findById(id).populate('halls');
-    console.log(cinema);
 
     return cinema;
   }
