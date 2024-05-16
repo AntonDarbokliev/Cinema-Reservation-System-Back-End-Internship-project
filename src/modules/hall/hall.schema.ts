@@ -23,6 +23,9 @@ export class Hall {
 
   @Prop({ type: Number })
   numberOfSeats: number;
+
+  @Prop({ type: String, default: '' })
+  cinemaId: string;
 }
 export const seatSchema = SchemaFactory.createForClass(Seat);
 export const rowSchema = SchemaFactory.createForClass(Row);
@@ -42,6 +45,9 @@ const seatCountInHall = (hall: Hall) => {
 hallSchema.pre('save', function (next) {
   const totalHallSeats = seatCountInHall(this);
   this.numberOfSeats = totalHallSeats;
+  if (this.cinemaId.length <= 0 && this.isNew) {
+    throw new Error('Cinema id is required when initially creating a hall');
+  }
   next();
 });
 
