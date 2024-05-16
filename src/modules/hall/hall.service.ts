@@ -24,7 +24,15 @@ export class HallService {
     return await this.hallModel.findByIdAndUpdate(id, dto, { new: true });
   }
 
-  async deleteHall(id: string) {
-    return await this.hallModel.findByIdAndDelete(id);
+  async deleteRow(hallId: string, rowId: string): Promise<Hall> {
+    const hall = await this.hallModel.findById(hallId);
+
+    hall.seatsLayout = hall.seatsLayout.filter(
+      (row) => String(row._id) !== rowId,
+    );
+
+    await hall.save();
+
+    return hall;
   }
 }
