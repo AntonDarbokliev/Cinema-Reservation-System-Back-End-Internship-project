@@ -24,6 +24,9 @@ export class Movie {
   @Prop({ type: String, required: true })
   language: string;
 
+  @Prop({ type: String, required: true })
+  poster: string;
+
   @Prop({ type: String })
   production?: Rating;
 
