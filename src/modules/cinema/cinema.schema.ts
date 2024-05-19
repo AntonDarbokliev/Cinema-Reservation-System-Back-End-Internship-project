@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { CreateProjection, CreateMenuItem } from './dto/index';
 import mongoose, { HydratedDocument } from 'mongoose';
 import { Hall } from '../hall/hall.schema';
+import { Movie } from '../movie/movie.schema';
 
 export type CinemaDocument = HydratedDocument<Cinema>;
 
@@ -24,6 +25,9 @@ export class Cinema {
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Hall' }] })
   halls: Hall[];
+
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Hall' }] })
+  movies: Movie[];
 }
 
 export const cinemaSchema = SchemaFactory.createForClass(Cinema);
