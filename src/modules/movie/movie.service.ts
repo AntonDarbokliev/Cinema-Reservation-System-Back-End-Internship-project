@@ -12,7 +12,7 @@ export class MovieService {
     return await this.movieModel.find();
   }
 
-  async createMovie(dto: CreateMovieDto) {
-    return await this.movieModel.create(dto);
+  async createMovie(dto: CreateMovieDto, imageUrl: string) {
+    return await this.movieModel.create({ ...dto, poster: imageUrl });
   }
 }
