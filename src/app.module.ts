@@ -8,6 +8,7 @@ import { RolesModule } from './modules/roles/roles.module';
 import { CinemaModule } from './modules/cinema/cinema.module';
 import { HallModule } from './modules/hall/hall.module';
 import { MovieModule } from './modules/movie/movie.module';
+import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { MovieModule } from './modules/movie/movie.module';
     CinemaModule,
     HallModule,
     MovieModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
   providers: [],
