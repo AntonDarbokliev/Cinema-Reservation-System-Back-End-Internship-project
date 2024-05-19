@@ -30,4 +30,8 @@ export class CreateHallDto {
   @IsString()
   @IsNotEmpty()
   cinemaId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  name: string;
 }

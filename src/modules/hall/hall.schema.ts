@@ -26,6 +26,9 @@ export class Hall {
 
   @Prop({ type: String, default: '' })
   cinemaId: string;
+
+  @Prop({ type: String, required: true })
+  name: string;
 }
 export const seatSchema = SchemaFactory.createForClass(Seat);
 export const rowSchema = SchemaFactory.createForClass(Row);
