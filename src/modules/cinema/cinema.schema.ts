@@ -26,7 +26,7 @@ export class Cinema {
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Hall' }] })
   halls: Hall[];
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Hall' }] })
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }] })
   movies: Movie[];
 }
 
