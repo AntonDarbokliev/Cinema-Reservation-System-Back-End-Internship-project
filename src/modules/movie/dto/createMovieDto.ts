@@ -1,21 +1,47 @@
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { Rating, Genre } from './index';
 
-export interface CreateMovieDto {
+export class CreateMovieDto {
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+
+  @IsNotEmpty()
   rating: Rating;
 
+  @IsNotEmpty()
   genres: Genre[];
 
+  @IsNotEmpty()
+  @IsString()
   length: string;
 
-  director: Rating;
+  @IsNotEmpty()
+  @IsString()
+  director: string;
 
-  description: Rating;
+  @IsNotEmpty()
+  @IsString()
+  description: string;
 
-  actors: Rating;
+  @IsNotEmpty()
+  @IsString()
+  actors: string;
 
+  @IsNotEmpty()
+  @IsString()
   language: string;
 
-  production?: Rating;
+  @IsNotEmpty()
+  @IsOptional()
+  production?: string;
 
+  @IsNotEmpty()
+  @IsString()
+  @IsOptional()
   subtitles?: string;
+
+  @IsNotEmpty()
+  @IsString()
+  cinemaId: string;
 }
