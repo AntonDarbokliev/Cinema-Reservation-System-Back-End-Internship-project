@@ -9,6 +9,7 @@ import { CinemaModule } from './modules/cinema/cinema.module';
 import { HallModule } from './modules/hall/hall.module';
 import { MovieModule } from './modules/movie/movie.module';
 import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
+import { ProjectionModule } from './modules/projection/projection.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
     HallModule,
     MovieModule,
     CloudinaryModule,
+    ProjectionModule,
   ],
   controllers: [AppController],
   providers: [],
