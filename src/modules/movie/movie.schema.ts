@@ -33,10 +33,10 @@ export class Movie {
   poster: string;
 
   @Prop({ type: String })
-  production?: Rating;
+  production: Rating;
 
-  @Prop({ type: String })
-  subtitles?: string;
+  @Prop({ type: Array(String), required: true })
+  subtitles: string[];
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Projection' }] })
   projections: Projection[];
