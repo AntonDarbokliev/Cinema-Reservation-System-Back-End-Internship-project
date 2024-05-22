@@ -6,6 +6,10 @@ import { createReadStream } from 'streamifier';
 @Injectable()
 export class CloudinaryService {
   uploadFile(file: Express.Multer.File): Promise<CloudinaryResponse> {
+    if (!file) {
+      throw new Error('No image file sent');
+    }
+
     return new Promise<CloudinaryResponse>((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         { transformation: { width: 600, height: 900, crop: 'fill' } },
