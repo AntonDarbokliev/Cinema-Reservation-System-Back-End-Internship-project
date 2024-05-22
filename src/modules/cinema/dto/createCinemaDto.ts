@@ -8,13 +8,4 @@ export class CreateCinemaDto {
   @IsString()
   @IsNotEmpty()
   name: string;
-
-  // @IsArray()
-  // hallPlans: object[]; // Change to hall plan[] later
-
-  // @IsArray()
-  // menu: CreateMenuItem[];
-
-  // @IsArray()
-  // projections: CreateProjection[];
 }
