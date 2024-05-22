@@ -1,22 +1,15 @@
-import { Hall } from 'src/modules/hall/hall.schema';
 import { ProjectionType } from './projectionType';
-import { Cinema } from 'src/modules/cinema/cinema.schema';
-import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class CreateProjectionDto {
   @IsString()
   @IsNotEmpty()
   startTime: string;
 
-  @IsDate()
+  @IsString()
   @IsNotEmpty()
-  startDate: Date;
-
-  @IsNotEmpty()
-  cinema: Cinema;
-
-  @IsNotEmpty()
-  hall: Hall;
+  startDate: string;
 
   @IsString()
   @IsNotEmpty()
@@ -24,5 +17,18 @@ export class CreateProjectionDto {
 
   @IsNumber()
   @IsNotEmpty()
+  @Transform(({ value }) => parseInt(value))
   baseTicketPrice: number;
+
+  @IsString()
+  @IsNotEmpty()
+  movie: string;
+
+  @IsString()
+  @IsNotEmpty()
+  cinema: string;
+
+  @IsString()
+  @IsNotEmpty()
+  hall: string;
 }
