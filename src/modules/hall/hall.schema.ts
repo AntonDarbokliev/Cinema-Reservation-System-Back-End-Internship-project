@@ -18,13 +18,13 @@ export class Row {
 
 @Schema()
 export class Hall {
-  @Prop({ required: true, type: Array(Row) })
+  @Prop({ type: Array(Row), default: [] })
   seatsLayout: Row[];
 
   @Prop({ type: Number })
   numberOfSeats: number;
 
-  @Prop({ type: String, default: '' })
+  @Prop({ type: String, required: true })
   cinemaId: string;
 
   @Prop({ type: String, required: true })

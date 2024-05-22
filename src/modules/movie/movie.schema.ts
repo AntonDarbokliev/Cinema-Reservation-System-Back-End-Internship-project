@@ -23,8 +23,8 @@ export class Movie {
   @Prop({ type: String, required: true })
   description: string;
 
-  @Prop({ type: String, required: true })
-  actors: string;
+  @Prop({ type: Array(String), required: true })
+  actors: string[];
 
   @Prop({ type: String, required: true })
   language: string;
