@@ -11,14 +11,13 @@ export class ProjectionController {
     return await this.projectionService.getProjections();
   }
 
-  @Post(':movieId')
-  async createProjection(
-    @Body() projectionDto: CreateProjectionDto,
-    @Param() movieId: string,
-  ) {
-    return await this.projectionService.createProjection(
-      projectionDto,
-      movieId,
-    );
+  @Get(':projectionId')
+  async getProjection(@Param('projectionId') projectionId: string) {
+    return await this.projectionService.getProjection(projectionId);
+  }
+
+  @Post()
+  async createProjection(@Body() projectionDto: CreateProjectionDto) {
+    return await this.projectionService.createProjection(projectionDto);
   }
 }
