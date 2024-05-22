@@ -17,7 +17,8 @@ export class CinemaService {
     const cinema = await this.cinemaModel
       .findById(id)
       .populate('halls')
-      .populate('movies');
+      .populate('movies')
+      .populate('projections');
 
     return cinema;
   }
