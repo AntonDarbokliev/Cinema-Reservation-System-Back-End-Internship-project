@@ -1,5 +1,4 @@
-import { IsArray, IsNotEmpty, IsString } from 'class-validator';
-// import { Types } from 'mongoose';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export enum SeatType {
   SEAT_COMMON = 'Common',
@@ -23,10 +22,6 @@ export interface Seat {
 }
 
 export class CreateHallDto {
-  @IsArray()
-  @IsNotEmpty()
-  seatsLayout: Row[];
-
   @IsString()
   @IsNotEmpty()
   cinemaId: string;
