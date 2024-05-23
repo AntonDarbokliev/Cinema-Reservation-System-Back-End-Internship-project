@@ -29,7 +29,7 @@ export class MovieController {
     @Body() movieDto: CreateMovieDto,
     @UploadedFile() poster: Express.Multer.File,
   ) {
-    const imageUrl = (await this.cloudinarySerive.uploadFile(poster)).url;
+    const imageUrl = (await this.cloudinarySerive.uploadFile(poster, true)).url;
 
     return await this.movieService.createMovie(movieDto, imageUrl);
   }
