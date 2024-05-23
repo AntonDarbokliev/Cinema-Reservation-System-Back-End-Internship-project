@@ -34,13 +34,16 @@ export class Cinema {
 export const cinemaSchema = SchemaFactory.createForClass(Cinema);
 
 cinemaSchema.pre('save', function (next) {
+  if (this.hasOwnProperty('halls')) {
+    this.numberOfHalls = this.halls.length;
+  }
   this.numberOfHalls = this.halls.length;
   next();
 });
 
 cinemaSchema.pre('updateOne', function (next) {
   const updatedData: any = this.getUpdate();
-  if (updatedData.hasOwnProperty('hallPlans')) {
+  if (updatedData.hasOwnProperty('halls')) {
     updatedData.numberOfHalls = updatedData.halls.length;
   }
   next();
