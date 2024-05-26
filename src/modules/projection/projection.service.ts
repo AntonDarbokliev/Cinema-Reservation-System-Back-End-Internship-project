@@ -23,8 +23,8 @@ export class ProjectionService {
     return await this.projectionModel
       .findById(id)
       .populate('hall')
-      .populate('cinema')
-      .populate('movie');
+      .populate('movie')
+      .populate('reservations');
   }
 
   async createProjection(dto: CreateProjectionDto) {
