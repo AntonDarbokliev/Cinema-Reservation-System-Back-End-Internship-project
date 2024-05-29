@@ -13,12 +13,12 @@ export class HallService {
     @InjectModel(Cinema.name) private cinemaModel: Model<Cinema>,
   ) {}
 
-  async getAllHalls() {
-    return await this.hallModel.find();
+  async getAllCinemaHalls(cinemaId: string) {
+    return await this.hallModel.find({ cinemaId });
   }
 
   async getHall(id: string) {
-    return await this.hallModel.findById(id);
+    return await this.hallModel.findById(id).populate('seatsLayout.seats.type');
   }
 
   async createHall(dto: CreateHallDto) {
