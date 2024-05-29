@@ -12,6 +12,8 @@ import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
 import { ProjectionModule } from './modules/projection/projection.module';
 import { FoodAndBeverageModule } from './modules/food-and-beverage/food-and-beverage.module';
 import { ReservationModule } from './modules/reservation/reservation.module';
+import { TicketModule } from './modules/ticket/ticket.module';
+import { SeatTypeModule } from './modules/seat-type/seat-type.module';
 
 @Module({
   imports: [
@@ -29,6 +31,8 @@ import { ReservationModule } from './modules/reservation/reservation.module';
     ProjectionModule,
     FoodAndBeverageModule,
     ReservationModule,
+    TicketModule,
+    SeatTypeModule,
   ],
   controllers: [AppController],
   providers: [],

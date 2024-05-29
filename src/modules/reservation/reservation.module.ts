@@ -18,5 +18,6 @@ import { Projection, projectionSchema } from '../projection/projection.schema';
       { name: Projection.name, schema: projectionSchema },
     ]),
   ],
+  exports: [ReservationService],
 })
 export class ReservationModule {}
