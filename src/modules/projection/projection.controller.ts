@@ -6,12 +6,12 @@ import { CreateProjectionDto } from './dto/createProjectionDto';
 export class ProjectionController {
   constructor(private projectionService: ProjectionService) {}
 
-  @Get()
-  async getProjections() {
-    return await this.projectionService.getProjections();
+  @Get('cinema/:cinemaId')
+  async getProjectionsForCinema(@Param('cinemaId') cinemaId: string) {
+    return await this.projectionService.getProjectionsForCinema(cinemaId);
   }
 
-  @Get('/types')
+  @Get('types')
   getTypesOfProjections() {
     return this.projectionService.getTypesOfProjections();
   }
