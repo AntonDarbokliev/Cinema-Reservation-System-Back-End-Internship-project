@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { CreateProjectionDto } from './dto/createProjectionDto';
 import { Movie } from '../movie/movie.schema';
 import { Cinema } from '../cinema/cinema.schema';
+import { ProjectionType } from './dto/projectionType';
 
 export class ProjectionService {
   constructor(
@@ -25,6 +26,11 @@ export class ProjectionService {
       .populate('hall')
       .populate('movie')
       .populate('reservations');
+  }
+
+  getTypesOfProjections() {
+    const projectionTypes = Object.values(ProjectionType);
+    return projectionTypes;
   }
 
   async createProjection(dto: CreateProjectionDto) {
