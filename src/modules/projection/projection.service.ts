@@ -21,7 +21,8 @@ export class ProjectionService {
     return await this.projectionModel
       .find({ cinema: cinemaId })
       .populate('hall')
-      .populate('cinema');
+      .populate('cinema')
+      .populate('movie');
   }
 
   async getProjectionsForHall(hallId: string) {
