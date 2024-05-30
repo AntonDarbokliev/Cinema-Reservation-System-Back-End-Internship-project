@@ -5,7 +5,6 @@ import { Cinema } from '../cinema/cinema.schema';
 import { ProjectionType } from './dto/projectionType';
 import { Movie } from '../movie/movie.schema';
 import { Reservation } from '../reservation/reservation.schema';
-// import { getCurrentDateTime } from '../reservation/utils/getCurrentDateTime';
 
 enum ProjectionStatus {
   PROJECTION_SCHEDULED = 'Scheduled',
@@ -75,23 +74,37 @@ projectionSchema.virtual('status').get(function (this: Projection) {
   const projectionStart = new Date(this.startDate);
   projectionStart.setUTCHours(projectionStartHours, projectionStartMinutes);
   const projectionLengthHours = Number(this.movie.length) / 60;
+  console.log('Projection Length Hours: ', projectionLengthHours);
+
   const projectionEnd = new Date(
     projectionStart.getTime() + projectionLengthHours * 60 * 60 * 1000,
-  );
-  // const dateTime = await getCurrentDateTime(); Cannot have async tasks in getters, will look into it later
-  const currentTimeMiliseconds = new Date().getTime();
+  ).getTime();
+
+  const currentTime = new Date();
+  const localOffset = Number(process.env.UTC_TIME_OFFSET);
+
+  if (localOffset < 0) {
+    currentTime.setHours(currentTime.getHours() + Math.abs(localOffset));
+  } else {
+    currentTime.setHours(currentTime.getHours() - localOffset);
+  }
 
   let status: ProjectionStatus = ProjectionStatus.PROJECTION_SCHEDULED;
 
-  if (currentTimeMiliseconds > projectionEnd.getTime()) {
+  console.log('Current projection start: ', projectionStart.getTime());
+  console.log('Current projection end: ', projectionEnd);
+  console.log('Current Time: ', currentTime.getTime());
+  console.log('------------------');
+
+  if (currentTime.getTime() > projectionEnd) {
     status = ProjectionStatus.PROJECTION_ENDED;
   } else if (
-    currentTimeMiliseconds > projectionStart.getTime() &&
-    currentTimeMiliseconds < projectionEnd.getTime()
+    currentTime.getTime() > projectionStart.getTime() &&
+    currentTime.getTime() < projectionEnd
   ) {
     status = ProjectionStatus.PROJECTION_RUNNING;
   } else if (
-    projectionStart.getTime() - currentTimeMiliseconds <=
+    projectionStart.getTime() - currentTime.getTime() <=
     thirtyMinutesMilliseconds
   ) {
     status = ProjectionStatus.PROJECTION_AWAITING;
