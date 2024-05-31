@@ -1,7 +1,6 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { TicketService } from './ticket.service';
 import { CreateTicketDto } from './dto/CreateTicketDto';
-import { GetProjectionDto } from './dto/GetProjectionDto';
 
 @Controller('tickets')
 export class TicketContoller {
@@ -12,10 +11,8 @@ export class TicketContoller {
     return await this.ticketService.createTicket(ticketDto);
   }
 
-  @Get()
-  async getTicketsForProjection(@Body() getProjectionDto: GetProjectionDto) {
-    return await this.ticketService.getTicketsForProjection(
-      getProjectionDto.projectionId,
-    );
+  @Get('projection/:projectionId')
+  async getTicketsForProjection(@Param('projectionId') projectionId: string) {
+    return await this.ticketService.getTicketsForProjection(projectionId);
   }
 }

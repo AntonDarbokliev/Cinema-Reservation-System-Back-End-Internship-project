@@ -9,7 +9,7 @@ export class CreateTicketDto {
 
   @IsString()
   @IsOptional()
-  reservaton: string;
+  reservaton?: string;
 
   @IsString()
   @IsNotEmpty()
@@ -24,4 +24,9 @@ export class CreateTicketDto {
   @IsNotEmpty()
   @Transform(({ value }) => parseInt(value))
   seatNumber: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @Transform(({ value }) => parseInt(value))
+  price: number;
 }
