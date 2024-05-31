@@ -12,6 +12,10 @@ export class MovieService {
     @InjectModel(Cinema.name) private cinemaModel: Model<Cinema>,
   ) {}
 
+  async getMovie(movieId: string) {
+    return await this.movieModel.findById(movieId);
+  }
+
   async getMovies() {
     return await this.movieModel.find();
   }
@@ -21,6 +25,18 @@ export class MovieService {
     await this.cinemaModel.findByIdAndUpdate(dto.cinemaId, {
       $push: { movies: newMovie._id },
     });
+
     return newMovie;
+  }
+
+  async editMovie(dto: CreateMovieDto, imageUrl: string, movieId: string) {
+    return await this.movieModel.findByIdAndUpdate(
+      movieId,
+      {
+        ...dto,
+        poster: imageUrl,
+      },
+      { new: true },
+    );
   }
 }
