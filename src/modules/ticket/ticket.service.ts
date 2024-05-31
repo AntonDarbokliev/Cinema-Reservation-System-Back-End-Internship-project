@@ -5,12 +5,14 @@ import { Model } from 'mongoose';
 import { CreateTicketDto } from './dto/CreateTicketDto';
 import { ReservationService } from '../reservation/reservation.service';
 import { ReservationStatus } from '../reservation/dto/reservationStatus';
+import { Projection } from '../projection/projection.schema';
 
 @Injectable()
 export class TicketService {
   constructor(
     @InjectModel(Ticket.name) private ticketModel: Model<Ticket>,
     private reservationService: ReservationService,
+    @InjectModel(Projection.name) private projectionModel: Model<Projection>,
   ) {}
 
   async getTicketsForProjection(projectionId: string) {
@@ -47,6 +49,12 @@ export class TicketService {
       throw new BadRequestException('Seat alrady taken');
     }
 
-    return await this.ticketModel.create(ticketDto);
+    const ticket = await this.ticketModel.create(ticketDto);
+
+    await this.projectionModel.findByIdAndUpdate(ticketDto.projection, {
+      $push: { tickets: ticket },
+    });
+
+    return ticket;
   }
 }
