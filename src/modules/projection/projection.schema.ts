@@ -5,6 +5,7 @@ import { Cinema } from '../cinema/cinema.schema';
 import { ProjectionType } from './dto/projectionType';
 import { Movie } from '../movie/movie.schema';
 import { Reservation } from '../reservation/reservation.schema';
+import { Ticket } from '../ticket/ticket.schema';
 
 enum ProjectionStatus {
   PROJECTION_SCHEDULED = 'Scheduled',
@@ -60,7 +61,11 @@ export class Projection {
 
   status: ProjectionStatus;
 
-  // Later: Tickets sold already
+  @Prop({
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Ticket' }],
+    default: [],
+  })
+  tickets: Ticket[];
 }
 export const projectionSchema = SchemaFactory.createForClass(Projection);
 
@@ -74,7 +79,6 @@ projectionSchema.virtual('status').get(function (this: Projection) {
   const projectionStart = new Date(this.startDate);
   projectionStart.setUTCHours(projectionStartHours, projectionStartMinutes);
   const projectionLengthHours = Number(this.movie.length) / 60;
-  console.log('Projection Length Hours: ', projectionLengthHours);
 
   const projectionEnd = new Date(
     projectionStart.getTime() + projectionLengthHours * 60 * 60 * 1000,
@@ -90,11 +94,6 @@ projectionSchema.virtual('status').get(function (this: Projection) {
   }
 
   let status: ProjectionStatus = ProjectionStatus.PROJECTION_SCHEDULED;
-
-  console.log('Current projection start: ', projectionStart.getTime());
-  console.log('Current projection end: ', projectionEnd);
-  console.log('Current Time: ', currentTime.getTime());
-  console.log('------------------');
 
   if (currentTime.getTime() > projectionEnd) {
     status = ProjectionStatus.PROJECTION_ENDED;
