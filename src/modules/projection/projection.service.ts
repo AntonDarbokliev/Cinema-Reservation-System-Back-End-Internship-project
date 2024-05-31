@@ -7,6 +7,7 @@ import { Cinema } from '../cinema/cinema.schema';
 import { ProjectionType } from './dto/projectionType';
 import { HallService } from '../hall/hall.service';
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { EditProjectionDto } from './dto/editProjectionDto';
 
 @Injectable()
 export class ProjectionService {
@@ -113,5 +114,12 @@ export class ProjectionService {
       $push: { projections: projection },
     });
     return projection;
+  }
+
+  async editProjection(projectionId: string, dto: EditProjectionDto) {
+    return await this.projectionModel.findByIdAndUpdate(projectionId, dto, {
+      new: true,
+      populate: 'cinema hall movie',
+    });
   }
 }
