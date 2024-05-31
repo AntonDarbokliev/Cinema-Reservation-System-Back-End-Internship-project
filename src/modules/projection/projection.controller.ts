@@ -11,6 +11,11 @@ export class ProjectionController {
     return await this.projectionService.getProjectionsForCinema(cinemaId);
   }
 
+  @Get('movie/:movieId')
+  async getProjectionsForMovie(@Param('movieId') movieId: string) {
+    return await this.projectionService.getProjectionsForMovie(movieId);
+  }
+
   @Get('types')
   getTypesOfProjections() {
     return this.projectionService.getTypesOfProjections();

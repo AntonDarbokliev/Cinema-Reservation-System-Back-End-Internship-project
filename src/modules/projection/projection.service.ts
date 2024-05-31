@@ -25,6 +25,14 @@ export class ProjectionService {
       .populate('movie');
   }
 
+  async getProjectionsForMovie(movieId: string) {
+    return await this.projectionModel
+      .find({ movie: movieId })
+      .populate('hall')
+      .populate('cinema')
+      .populate('movie');
+  }
+
   async getProjectionsForHall(hallId: string) {
     return await this.projectionModel.find({ hall: hallId }).populate('movie');
   }
@@ -34,7 +42,8 @@ export class ProjectionService {
       .findById(id)
       .populate('hall')
       .populate('movie')
-      .populate('reservations');
+      .populate('reservations')
+      .populate('tickets');
   }
 
   getTypesOfProjections() {
