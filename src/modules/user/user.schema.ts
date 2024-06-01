@@ -1,6 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Date, HydratedDocument, now } from 'mongoose';
+import mongoose, { Date, HydratedDocument, now } from 'mongoose';
 import * as bcrypt from 'bcrypt';
+import { Reservation } from '../reservation/reservation.schema';
+import { Role } from '../roles/role.enum';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -21,8 +23,17 @@ export class User {
   @Prop({ required: true, type: String })
   password: string;
 
-  @Prop({ required: true, type: Array, default: 1 })
-  roles: number[];
+  @Prop({ required: true, type: Array, default: Role.ADMIN })
+  roles: Role[];
+
+  @Prop({
+    required: true,
+    type: [
+      { required: true, type: mongoose.Types.ObjectId, ref: 'Reservation' },
+    ],
+    default: [],
+  })
+  reservations: Reservation[];
 }
 
 export const userSchema = SchemaFactory.createForClass(User);

@@ -4,12 +4,14 @@ import { CreateReservationDto } from './dto/createReservationDto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Projection } from '../projection/projection.schema';
 import { Model } from 'mongoose';
+import { User } from '../user/user.schema';
 
 @Controller('reservations')
 export class ReservationController {
   constructor(
     private reservationService: ReservationService,
     @InjectModel(Projection.name) private projectionModel: Model<Projection>,
+    @InjectModel(User.name) private userModel: Model<User>,
   ) {}
 
   @Get(':reservationId')
@@ -25,6 +27,14 @@ export class ReservationController {
         reservations: reservation._id,
       },
     });
+
+    if (dto.user) {
+      await this.userModel.findByIdAndUpdate(dto.user, {
+        $push: {
+          reservations: reservation._id,
+        },
+      });
+    }
     return reservation;
   }
 
