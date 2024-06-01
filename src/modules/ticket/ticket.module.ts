@@ -5,6 +5,7 @@ import { TicketService } from './ticket.service';
 import { TicketContoller } from './ticket.controller';
 import { ReservationModule } from '../reservation/reservation.module';
 import { Projection, projectionSchema } from '../projection/projection.schema';
+import { ProjectionModule } from '../projection/projection.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { Projection, projectionSchema } from '../projection/projection.schema';
       { name: Projection.name, schema: projectionSchema },
     ]),
     ReservationModule,
+    ProjectionModule,
   ],
   providers: [TicketService],
   controllers: [TicketContoller],

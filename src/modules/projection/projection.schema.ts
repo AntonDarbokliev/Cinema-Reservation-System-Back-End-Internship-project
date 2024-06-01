@@ -6,8 +6,9 @@ import { ProjectionType } from './dto/projectionType';
 import { Movie } from '../movie/movie.schema';
 import { Reservation } from '../reservation/reservation.schema';
 import { Ticket } from '../ticket/ticket.schema';
+// import * as moment from 'moment';
 
-enum ProjectionStatus {
+export enum ProjectionStatus {
   PROJECTION_SCHEDULED = 'Scheduled',
   PROJECTION_AWAITING = 'Awaiting',
   PROJECTION_RUNNING = 'Running',
@@ -86,13 +87,16 @@ projectionSchema.virtual('status').get(function (this: Projection) {
 
   const currentTime = new Date();
   const localOffset = Number(process.env.UTC_TIME_OFFSET);
+  // const localOffset = Number(process.env.UTC_TIME_OFFSET);
+  // const [hours, minutes] = moment().format('HH:mm').split(':');
+  // currentTime.setHours(Number(hours));
+  // currentTime.setMinutes(Number(minutes));
 
   if (localOffset < 0) {
     currentTime.setHours(currentTime.getHours() + Math.abs(localOffset));
   } else {
     currentTime.setHours(currentTime.getHours() - localOffset);
   }
-
   let status: ProjectionStatus = ProjectionStatus.PROJECTION_SCHEDULED;
 
   if (currentTime.getTime() > projectionEnd) {

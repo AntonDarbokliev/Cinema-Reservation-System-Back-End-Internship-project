@@ -18,5 +18,6 @@ import { HallModule } from '../hall/hall.module';
   ],
   controllers: [ProjectionController],
   providers: [ProjectionService],
+  exports: [ProjectionService],
 })
 export class ProjectionModule {}
