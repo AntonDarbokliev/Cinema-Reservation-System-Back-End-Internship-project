@@ -2,7 +2,6 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Reservation } from './reservation.schema';
-import { getCurrentDateTime } from './utils/getCurrentDateTime';
 import { CreateReservationDto } from './dto/createReservationDto';
 import { ReservationStatus } from './dto/reservationStatus';
 
@@ -28,9 +27,10 @@ export class ReservationService {
     if (
       reservations.some(
         (reservation) =>
-          (reservation.seatRow === dto.seatRow &&
+          ((reservation.seatRow === dto.seatRow &&
             reservation.seatNumber === dto.seatNumber) ||
-          reservation.seat._id === dto.seat,
+            reservation.seat._id === dto.seat) &&
+          reservation.status === ReservationStatus.ACTIVE,
       )
     ) {
       throw new BadRequestException('Seat already reserved');
@@ -50,13 +50,24 @@ export class ReservationService {
   async cancelReservation(reservationId: string) {
     const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
     const reservation = await this.getSingleReservation(reservationId);
-    const timeDate = await getCurrentDateTime();
-    timeDate.dateTime.getTime();
+
+    const currentTime = new Date();
+    const localOffset = Number(process.env.UTC_TIME_OFFSET);
+
+    if (localOffset < 0) {
+      currentTime.setHours(currentTime.getHours() + Math.abs(localOffset));
+    } else {
+      currentTime.setHours(currentTime.getHours() - localOffset);
+    }
+
     if (
-      reservation.projection.startDate.getTime() - timeDate.dateTime.getTime() >
+      reservation.projection.startDate.getTime() - currentTime.getTime() >
       oneDayInMilliseconds
     ) {
-      return await this.reservationModel.findByIdAndDelete(reservationId);
+      return await this.updateReservationStatus(
+        reservationId,
+        ReservationStatus.CANCELLED,
+      );
     } else {
       throw new BadRequestException(
         'Cannot cancel reservation later than one day in advance',
