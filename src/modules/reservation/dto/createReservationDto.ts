@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateReservationDto {
   @IsString()
@@ -19,4 +19,8 @@ export class CreateReservationDto {
   @IsString()
   @IsNotEmpty()
   projection: string;
+
+  @IsString()
+  @IsOptional()
+  user: string;
 }

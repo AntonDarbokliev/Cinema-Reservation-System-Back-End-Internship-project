@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Reservation, reservationSchema } from './reservation.schema';
 import { Seat, seatSchema } from '../hall/hall.schema';
 import { Projection, projectionSchema } from '../projection/projection.schema';
+import { User, userSchema } from '../user/user.schema';
 
 @Module({
   providers: [ReservationService],
@@ -17,6 +18,7 @@ import { Projection, projectionSchema } from '../projection/projection.schema';
     MongooseModule.forFeature([
       { name: Projection.name, schema: projectionSchema },
     ]),
+    MongooseModule.forFeature([{ name: User.name, schema: userSchema }]),
   ],
   exports: [ReservationService],
 })
