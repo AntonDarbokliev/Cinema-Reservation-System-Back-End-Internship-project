@@ -4,11 +4,14 @@ import { Model } from 'mongoose';
 import { Reservation } from './reservation.schema';
 import { CreateReservationDto } from './dto/createReservationDto';
 import { ReservationStatus } from './dto/reservationStatus';
+import { ProjectionService } from '../projection/projection.service';
+import { ProjectionStatus } from '../projection/projection.schema';
 
 @Injectable()
 export class ReservationService {
   constructor(
     @InjectModel('Reservation') private reservationModel: Model<Reservation>,
+    private projectionService: ProjectionService,
   ) {}
 
   async getProjectionReservations(projectionId: string) {
@@ -23,9 +26,12 @@ export class ReservationService {
   }
 
   async createReservation(dto: CreateReservationDto) {
-    const reservations = await this.getProjectionReservations(dto.projection);
+    const reservationProjection = await this.projectionService.getProjection(
+      dto.projection,
+    );
+    // const reservations = await this.getProjectionReservations(dto.projection);
     if (
-      reservations.some(
+      reservationProjection.reservations.some(
         (reservation) =>
           ((reservation.seatRow === dto.seatRow &&
             reservation.seatNumber === dto.seatNumber) ||
@@ -34,6 +40,12 @@ export class ReservationService {
       )
     ) {
       throw new BadRequestException('Seat already reserved');
+    }
+
+    if (
+      reservationProjection.status !== ProjectionStatus.PROJECTION_SCHEDULED
+    ) {
+      throw new BadRequestException('Too late to reserve a seat');
     }
     return await this.reservationModel.create(dto);
   }

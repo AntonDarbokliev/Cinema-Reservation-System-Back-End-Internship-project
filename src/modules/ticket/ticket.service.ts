@@ -5,7 +5,8 @@ import { Model } from 'mongoose';
 import { CreateTicketDto } from './dto/CreateTicketDto';
 import { ReservationService } from '../reservation/reservation.service';
 import { ReservationStatus } from '../reservation/dto/reservationStatus';
-import { Projection } from '../projection/projection.schema';
+import { Projection, ProjectionStatus } from '../projection/projection.schema';
+import { ProjectionService } from '../projection/projection.service';
 
 @Injectable()
 export class TicketService {
@@ -13,6 +14,7 @@ export class TicketService {
     @InjectModel(Ticket.name) private ticketModel: Model<Ticket>,
     private reservationService: ReservationService,
     @InjectModel(Projection.name) private projectionModel: Model<Projection>,
+    private projectionService: ProjectionService,
   ) {}
 
   async getTicketsForProjection(projectionId: string) {
@@ -37,9 +39,12 @@ export class TicketService {
         ReservationStatus.COMPLETED,
       );
     }
-    const tickets = await this.getTicketsForProjection(ticketDto.projection);
+    // const tickets = await this.getTicketsForProjection(ticketDto.projection);
+    const projection = await this.projectionService.getProjection(
+      ticketDto.projection,
+    );
     if (
-      tickets.some(
+      projection.tickets.some(
         (ticket) =>
           (ticket.seatRow === ticketDto.seatRow &&
             ticket.seatNumber === ticketDto.seatNumber) ||
@@ -49,6 +54,9 @@ export class TicketService {
       throw new BadRequestException('Seat alrady taken');
     }
 
+    if (projection.status === ProjectionStatus.PROJECTION_ENDED) {
+      throw new BadRequestException('Projection has already ended');
+    }
     const ticket = await this.ticketModel.create(ticketDto);
 
     await this.projectionModel.findByIdAndUpdate(ticketDto.projection, {
