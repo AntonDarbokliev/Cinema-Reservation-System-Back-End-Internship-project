@@ -29,7 +29,7 @@ export class TicketService {
         throw new BadRequestException('Reservation not found');
       }
 
-      if (reservation.status !== ReservationStatus.RESERVED) {
+      if (reservation.status !== ReservationStatus.ACTIVE) {
         throw new BadRequestException('Reservation has already been claimed');
       }
       this.reservationService.updateReservationStatus(
