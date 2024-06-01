@@ -10,6 +10,7 @@ export class Seat {
   type: SeatType;
   _id: string;
 }
+
 @Schema()
 export class Row {
   @Prop({ type: Array(Seat) })
