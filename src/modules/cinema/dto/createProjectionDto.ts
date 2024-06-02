@@ -1,11 +1,11 @@
 import {
   IsBoolean,
   IsDate,
-  // IsNotEmpty,
   IsNumber,
   IsString,
   ValidateIf,
 } from 'class-validator';
+import { Rating } from 'src/modules/movie/dto';
 
 enum ProjectionType {
   PROJECTION_2D = '2D',
@@ -15,27 +15,21 @@ enum ProjectionType {
 
 export class CreateProjection {
   @IsDate()
-  // @IsNotEmpty()
   date: Date;
 
   @IsString()
-  // @IsNotEmpty()
   time: string;
 
   @IsString()
-  // @IsNotEmpty()
   cinema: string;
 
   @IsNumber()
-  // @IsNotEmpty()
   hall: number;
 
   @IsBoolean()
-  // @IsNotEmpty()
   isPremiere: boolean;
 
   @IsString()
-  // @IsNotEmpty()
   @ValidateIf(
     (obj) =>
       obj.type == ProjectionType.PROJECTION_2D ||
@@ -48,10 +42,8 @@ export class CreateProjection {
     | ProjectionType.PROJECTION_4DX;
 
   @IsString()
-  // @IsNotEmpty()
   length: number;
 
   @IsString()
-  // @IsNotEmpty()
-  ageRating: string;
+  ageRating: Rating;
 }
