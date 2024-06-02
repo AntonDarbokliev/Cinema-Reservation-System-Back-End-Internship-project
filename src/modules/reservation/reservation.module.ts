@@ -7,9 +7,10 @@ import { Seat, seatSchema } from '../hall/hall.schema';
 import { Projection, projectionSchema } from '../projection/projection.schema';
 import { User, userSchema } from '../user/user.schema';
 import { ProjectionModule } from '../projection/projection.module';
+import { ReservationGateway } from './reservation.gateway';
 
 @Module({
-  providers: [ReservationService],
+  providers: [ReservationService, ReservationGateway],
   controllers: [ReservationController],
   imports: [
     MongooseModule.forFeature([
