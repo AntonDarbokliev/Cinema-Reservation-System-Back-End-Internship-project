@@ -22,5 +22,5 @@ export class CreateReservationDto {
 
   @IsString()
   @IsOptional()
-  user: string;
+  user?: string;
 }

@@ -29,7 +29,7 @@ export class ReservationService {
     const reservationProjection = await this.projectionService.getProjection(
       dto.projection,
     );
-    // const reservations = await this.getProjectionReservations(dto.projection);
+
     if (
       reservationProjection.reservations.some(
         (reservation) =>
