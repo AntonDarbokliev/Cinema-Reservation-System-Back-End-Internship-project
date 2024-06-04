@@ -13,6 +13,8 @@ enum SocketEvent {
   DISCONNECT = 'disconnectSocket',
   SET_SEAT = 'setSeat',
   UNSET_SEAT = 'unsetSeat',
+  RESERVE_SEAT = 'reserveSeat',
+  BUY_SEAT = 'buySeat',
   ERROR = 'err',
 }
 
@@ -48,5 +50,17 @@ export class ReservationGateway
   unselectSeat(@MessageBody() body: any) {
     console.log(body);
     this.server.emit(SocketEvent.UNSET_SEAT, body);
+  }
+
+  @SubscribeMessage(SocketEvent.RESERVE_SEAT)
+  reserveSeat(@MessageBody() body: any) {
+    console.log(body);
+    this.server.emit(SocketEvent.RESERVE_SEAT, body);
+  }
+
+  @SubscribeMessage(SocketEvent.BUY_SEAT)
+  buySeat(@MessageBody() body: any) {
+    console.log(body);
+    this.server.emit(SocketEvent.BUY_SEAT, body);
   }
 }
