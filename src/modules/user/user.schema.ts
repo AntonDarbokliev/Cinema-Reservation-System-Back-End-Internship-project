@@ -1,12 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Date, HydratedDocument, now } from 'mongoose';
+import { Date, HydratedDocument, now } from 'mongoose';
 import * as bcrypt from 'bcrypt';
-import { Reservation } from '../reservation/reservation.schema';
 import { Role } from '../roles/role.enum';
 
 export type UserDocument = HydratedDocument<User>;
 
-@Schema()
+@Schema({
+  toJSON: { virtuals: true },
+})
 export class User {
   @Prop({ required: true, type: String })
   firstName: string;
@@ -25,15 +26,6 @@ export class User {
 
   @Prop({ required: true, type: Array, default: Role.ADMIN })
   roles: Role[];
-
-  @Prop({
-    required: true,
-    type: [
-      { required: true, type: mongoose.Types.ObjectId, ref: 'Reservation' },
-    ],
-    default: [],
-  })
-  reservations: Reservation[];
 }
 
 export const userSchema = SchemaFactory.createForClass(User);
@@ -42,4 +34,10 @@ userSchema.pre('save', async function (next) {
   const hashedPass = await bcrypt.hash(this.password, 10);
   this.password = hashedPass;
   next();
+});
+
+userSchema.virtual('reservations', {
+  ref: 'Reservation',
+  localField: '_id',
+  foreignField: 'userId',
 });

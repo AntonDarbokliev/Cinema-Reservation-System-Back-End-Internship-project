@@ -3,7 +3,6 @@ import mongoose, { now } from 'mongoose';
 import { Projection } from '../projection/projection.schema';
 import { Seat } from '../hall/hall.schema';
 import { ReservationStatus } from './dto/reservationStatus';
-import { User } from '../user/user.schema';
 
 @Schema()
 export class Reservation {
@@ -35,8 +34,8 @@ export class Reservation {
   // Cannot be a virtual property since it's based on a projection and projections could be deleted after passing
   // meaning that the status cannot be calculated since the reservation is not linked to a projection
 
-  @Prop({ type: mongoose.Types.ObjectId, ref: 'User' })
-  user: User;
+  @Prop({ type: mongoose.Types.ObjectId })
+  userId: string;
 }
 
 export const reservationSchema = SchemaFactory.createForClass(Reservation);
