@@ -39,4 +39,8 @@ export class MovieService {
       { new: true },
     );
   }
+
+  async deleteMovie(movieId: string) {
+    return await this.movieModel.findByIdAndDelete(movieId);
+  }
 }
