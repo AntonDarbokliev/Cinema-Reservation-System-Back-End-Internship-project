@@ -17,7 +17,9 @@ export class SeatTypeService {
 
   async getAllCinemaSeatTypes(cinemaId: string) {
     const newObjectId = new mongoose.Types.ObjectId();
-
+    // blank seat _id will be different each time the client requests the seat types,
+    // but it doesn't matter, we just need all the blank seats to have an the same id,
+    // at a single moment, no matter what it is next time.
     const blankSeatType: GetSeatTypeDto = {
       _id: newObjectId,
       name: 'blank',
