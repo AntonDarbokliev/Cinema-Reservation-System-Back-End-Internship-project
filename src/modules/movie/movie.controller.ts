@@ -1,11 +1,13 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
   Post,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { MovieService } from './movie.service';
@@ -13,6 +15,9 @@ import { CreateMovieDto } from './dto/createMovieDto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { EditMovieDto } from './dto/editMovieDto';
+import { RolesGuard } from '../roles/guard';
+import { Role } from '../roles/role.enum';
+import { Roles } from '../roles/decorator/roles.decorator';
 
 @Controller('movies')
 export class MovieController {
@@ -43,6 +48,8 @@ export class MovieController {
     return await this.movieService.createMovie(movieDto, imageUrl);
   }
 
+  @UseGuards(RolesGuard)
+  @Roles([Role.ROOT_ADMIN])
   @Patch(':movieId')
   @UseInterceptors(FileInterceptor('poster'))
   async editMovie(
@@ -56,5 +63,12 @@ export class MovieController {
     const imageUrl = (await this.cloudinaryService.uploadFile(poster, true))
       .url;
     return await this.movieService.editMovie(movieDto, imageUrl, movieId);
+  }
+
+  @UseGuards(RolesGuard)
+  @Roles([Role.ROOT_ADMIN])
+  @Delete(':movieId')
+  async deleteMovie(@Param('movieId') movieId: string) {
+    return await this.movieService.deleteMovie(movieId);
   }
 }
