@@ -22,5 +22,6 @@ import { JwtGuard } from './guard';
       inject: [ConfigService],
     }),
   ],
+  exports: [AuthService],
 })
 export class AuthModule {}
