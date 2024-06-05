@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { Hall } from '../hall/hall.schema';
-import { Cinema } from '../cinema/cinema.schema';
+// import { Cinema } from '../cinema/cinema.schema';
 import { ProjectionType } from './dto/projectionType';
 import { Movie } from '../movie/movie.schema';
 import { Reservation } from '../reservation/reservation.schema';
@@ -27,12 +27,18 @@ export class Projection {
   @Prop({ type: Date, required: true })
   startDate: Date;
 
+  // @Prop({
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: 'Cinema',
+  //   required: true,
+  // })
+  // cinema: Cinema;
+
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Cinema',
     required: true,
   })
-  cinema: Cinema;
+  cinemaId: string;
 
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
