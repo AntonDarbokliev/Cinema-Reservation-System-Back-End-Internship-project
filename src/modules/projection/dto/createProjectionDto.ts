@@ -26,7 +26,7 @@ export class CreateProjectionDto {
 
   @IsString()
   @IsNotEmpty()
-  cinema: string;
+  cinemaId: string;
 
   @IsString()
   @IsNotEmpty()

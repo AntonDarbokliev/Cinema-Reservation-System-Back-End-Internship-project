@@ -108,7 +108,7 @@ export class ProjectionService {
       $push: { projections: projection },
     });
 
-    await this.cinemaModel.findByIdAndUpdate(dto.cinema, {
+    await this.cinemaModel.findByIdAndUpdate(dto.cinemaId, {
       $push: { projections: projection },
     });
     return projection;

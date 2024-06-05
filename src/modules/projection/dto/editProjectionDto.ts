@@ -26,7 +26,7 @@ export class EditProjectionDto {
 
   @IsString()
   @IsOptional()
-  cinema: string;
+  cinemaId: string;
 
   @IsString()
   @IsOptional()

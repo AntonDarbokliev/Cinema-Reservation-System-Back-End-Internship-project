@@ -21,7 +21,7 @@ export class CreateProjection {
   time: string;
 
   @IsString()
-  cinema: string;
+  cinemaId: string;
 
   @IsNumber()
   hall: number;
