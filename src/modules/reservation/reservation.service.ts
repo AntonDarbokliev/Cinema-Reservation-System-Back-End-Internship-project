@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  forwardRef,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Reservation } from './reservation.schema';
@@ -6,12 +11,15 @@ import { CreateReservationDto } from './dto/createReservationDto';
 import { ReservationStatus } from './dto/reservationStatus';
 import { ProjectionService } from '../projection/projection.service';
 import { ProjectionStatus } from '../projection/projection.schema';
+import { TicketService } from '../ticket/ticket.service';
 
 @Injectable()
 export class ReservationService {
   constructor(
     @InjectModel('Reservation') private reservationModel: Model<Reservation>,
     private projectionService: ProjectionService,
+    @Inject(forwardRef(() => TicketService))
+    private ticketService: TicketService,
   ) {}
 
   async getProjectionReservations(projectionId: string) {
@@ -29,6 +37,20 @@ export class ReservationService {
     const reservationProjection = await this.projectionService.getProjection(
       dto.projection,
     );
+
+    const ticketsForProjection =
+      await this.ticketService.getTicketsForProjection(dto.projection);
+
+    if (
+      ticketsForProjection.some(
+        (ticket) =>
+          (ticket.seatRow === dto.seatRow &&
+            ticket.seatNumber === dto.seatNumber) ||
+          ticket.seat._id === dto.seat,
+      )
+    ) {
+      throw new BadRequestException('Seat already bought');
+    }
 
     if (
       reservationProjection.reservations.some(
