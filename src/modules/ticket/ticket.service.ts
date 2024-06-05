@@ -39,7 +39,6 @@ export class TicketService {
         ReservationStatus.COMPLETED,
       );
     }
-    // const tickets = await this.getTicketsForProjection(ticketDto.projection);
     const projection = await this.projectionService.getProjection(
       ticketDto.projection,
     );
