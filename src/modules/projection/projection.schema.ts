@@ -47,7 +47,7 @@ export class Projection {
   })
   movie: Movie;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: true, enum: ProjectionType })
   projectionType: ProjectionType;
 
   @Prop({ type: Number, required: true })
