@@ -10,6 +10,10 @@ import { HallModule } from './modules/hall/hall.module';
 import { MovieModule } from './modules/movie/movie.module';
 import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
 import { ProjectionModule } from './modules/projection/projection.module';
+import { FoodAndBeverageModule } from './modules/food-and-beverage/food-and-beverage.module';
+import { ReservationModule } from './modules/reservation/reservation.module';
+import { TicketModule } from './modules/ticket/ticket.module';
+import { SeatTypeModule } from './modules/seat-type/seat-type.module';
 
 @Module({
   imports: [
@@ -25,6 +29,10 @@ import { ProjectionModule } from './modules/projection/projection.module';
     MovieModule,
     CloudinaryModule,
     ProjectionModule,
+    FoodAndBeverageModule,
+    ReservationModule,
+    TicketModule,
+    SeatTypeModule,
   ],
   controllers: [AppController],
   providers: [],

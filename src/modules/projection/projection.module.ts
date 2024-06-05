@@ -5,6 +5,7 @@ import { ProjectionController } from './projection.controller';
 import { ProjectionService } from './projection.service';
 import { Projection, projectionSchema } from './projection.schema';
 import { Cinema, cinemaSchema } from '../cinema/cinema.schema';
+import { HallModule } from '../hall/hall.module';
 
 @Module({
   imports: [
@@ -13,8 +14,10 @@ import { Cinema, cinemaSchema } from '../cinema/cinema.schema';
     MongooseModule.forFeature([
       { name: Projection.name, schema: projectionSchema },
     ]),
+    HallModule,
   ],
   controllers: [ProjectionController],
   providers: [ProjectionService],
+  exports: [ProjectionService],
 })
 export class ProjectionModule {}

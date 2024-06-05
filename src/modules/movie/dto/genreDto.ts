@@ -6,4 +6,5 @@ export enum Genre {
   FANTASY = 'Fantasy',
   THRILLER = 'Thriller',
   ROMANCE = 'Romance',
+  OTHER = 'Other',
 }

@@ -15,9 +15,9 @@ import { EditHallDto } from './dto/editHallDto';
 export class HallController {
   constructor(private hallService: HallService) {}
 
-  @Get()
-  async getAllHalls() {
-    return await this.hallService.getAllHalls();
+  @Get('/cinema/:cinemaId')
+  async getAllCinemaHalls(@Param('cinemaId') cinemaId: string) {
+    return await this.hallService.getAllCinemaHalls(cinemaId);
   }
 
   @Get(':id')

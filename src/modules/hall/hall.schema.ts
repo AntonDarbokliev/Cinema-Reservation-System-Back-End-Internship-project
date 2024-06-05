@@ -1,14 +1,16 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { SeatType } from './dto';
-import { HydratedDocument } from 'mongoose';
+import mongoose, { HydratedDocument } from 'mongoose';
 
 export type CinemaDocument = HydratedDocument<Hall>;
 
 @Schema()
 export class Seat {
-  @Prop({ type: String, required: true })
+  @Prop({ type: mongoose.Types.ObjectId, required: true, ref: 'SeatType' })
   type: SeatType;
+  _id: string;
 }
+
 @Schema()
 export class Row {
   @Prop({ type: Array(Seat) })

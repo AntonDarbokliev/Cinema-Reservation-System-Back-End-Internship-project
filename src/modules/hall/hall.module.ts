@@ -12,5 +12,6 @@ import { Cinema, cinemaSchema } from '../cinema/cinema.schema';
     MongooseModule.forFeature([{ name: Hall.name, schema: hallSchema }]),
     MongooseModule.forFeature([{ name: Cinema.name, schema: cinemaSchema }]),
   ],
+  exports: [HallService],
 })
 export class HallModule {}

@@ -1,7 +1,7 @@
 import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { Rating, Genre } from './index';
 
-export class CreateMovieDto {
+export class EditMovieDto {
   @IsNotEmpty()
   @IsString()
   name: string;
@@ -42,7 +42,7 @@ export class CreateMovieDto {
   @IsArray()
   subtitles: string[];
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   cinemaId: string;
 }
