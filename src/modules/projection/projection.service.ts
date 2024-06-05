@@ -122,4 +122,8 @@ export class ProjectionService {
       populate: 'cinema hall movie',
     });
   }
+
+  async deleteProjection(projectionId: string) {
+    return await this.projectionModel.findByIdAndDelete(projectionId);
+  }
 }
