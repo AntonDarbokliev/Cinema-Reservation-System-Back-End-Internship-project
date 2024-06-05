@@ -27,13 +27,6 @@ export class Projection {
   @Prop({ type: Date, required: true })
   startDate: Date;
 
-  // @Prop({
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'Cinema',
-  //   required: true,
-  // })
-  // cinema: Cinema;
-
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
     required: true,
