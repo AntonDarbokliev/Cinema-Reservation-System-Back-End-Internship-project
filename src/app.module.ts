@@ -7,6 +7,9 @@ import { AuthModule } from './modules/auth/auth.module';
 import { RolesModule } from './modules/roles/roles.module';
 import { CinemaModule } from './modules/cinema/cinema.module';
 import { HallModule } from './modules/hall/hall.module';
+import { MovieModule } from './modules/movie/movie.module';
+import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
+import { ProjectionModule } from './modules/projection/projection.module';
 
 @Module({
   imports: [
@@ -19,6 +22,9 @@ import { HallModule } from './modules/hall/hall.module';
     RolesModule,
     CinemaModule,
     HallModule,
+    MovieModule,
+    CloudinaryModule,
+    ProjectionModule,
   ],
   controllers: [AppController],
   providers: [],

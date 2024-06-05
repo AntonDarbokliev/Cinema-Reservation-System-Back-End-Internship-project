@@ -1,0 +1,26 @@
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Movie } from './movie.schema';
+import { Model } from 'mongoose';
+import { CreateMovieDto } from './dto/createMovieDto';
+import { Cinema } from '../cinema/cinema.schema';
+
+@Injectable()
+export class MovieService {
+  constructor(
+    @InjectModel(Movie.name) private movieModel: Model<Movie>,
+    @InjectModel(Cinema.name) private cinemaModel: Model<Cinema>,
+  ) {}
+
+  async getMovies() {
+    return await this.movieModel.find();
+  }
+
+  async createMovie(dto: CreateMovieDto, imageUrl: string) {
+    const newMovie = await this.movieModel.create({ ...dto, poster: imageUrl });
+    await this.cinemaModel.findByIdAndUpdate(dto.cinemaId, {
+      $push: { movies: newMovie._id },
+    });
+    return newMovie;
+  }
+}

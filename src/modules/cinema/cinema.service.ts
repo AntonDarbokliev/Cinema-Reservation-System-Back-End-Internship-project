@@ -14,7 +14,11 @@ export class CinemaService {
   }
 
   async getCinema(id: string) {
-    const cinema = await this.cinemaModel.findById(id).populate('halls');
+    const cinema = await this.cinemaModel
+      .findById(id)
+      .populate('halls')
+      .populate('movies')
+      .populate('projections');
 
     return cinema;
   }

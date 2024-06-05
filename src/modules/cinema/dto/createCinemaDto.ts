@@ -1,5 +1,4 @@
-import { IsArray, IsNotEmpty, IsString } from 'class-validator';
-import { CreateMenuItem, CreateProjection } from './index';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateCinemaDto {
   @IsString()
@@ -9,13 +8,4 @@ export class CreateCinemaDto {
   @IsString()
   @IsNotEmpty()
   name: string;
-
-  // @IsArray()
-  // hallPlans: object[]; // Change to hall plan[] later
-
-  @IsArray()
-  menu: CreateMenuItem[];
-
-  @IsArray()
-  projections: CreateProjection[];
 }
