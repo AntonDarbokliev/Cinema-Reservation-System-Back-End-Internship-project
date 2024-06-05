@@ -3,11 +3,12 @@ import { CreateMenuItem } from './dto/index';
 import mongoose, { HydratedDocument } from 'mongoose';
 import { Hall } from '../hall/hall.schema';
 import { Movie } from '../movie/movie.schema';
-import { Projection } from '../projection/projection.schema';
 
 export type CinemaDocument = HydratedDocument<Cinema>;
 
-@Schema()
+@Schema({
+  toJSON: { virtuals: true },
+})
 export class Cinema {
   @Prop({ required: true, type: String })
   address: string;
@@ -20,9 +21,6 @@ export class Cinema {
 
   @Prop({ type: Array })
   menu: CreateMenuItem[];
-
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Projection' }] })
-  projections: Projection[];
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Hall' }] })
   halls: Hall[];
@@ -47,4 +45,10 @@ cinemaSchema.pre('updateOne', function (next) {
     updatedData.numberOfHalls = updatedData.halls.length;
   }
   next();
+});
+
+cinemaSchema.virtual('projections', {
+  ref: 'Projection',
+  localField: '_id',
+  foreignField: 'cinemaId',
 });
