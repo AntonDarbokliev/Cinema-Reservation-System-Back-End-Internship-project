@@ -59,9 +59,13 @@ export class MovieController {
   ) {
     const movie = await this.movieService.getMovie(movieId);
     const publicImageId = this.cloudinaryService.getPublicId(movie.poster);
-    await this.cloudinaryService.deleteImage(publicImageId);
-    const imageUrl = (await this.cloudinaryService.uploadFile(poster, true))
-      .url;
+    let imageUrl: string;
+    if (!movieDto.poster) {
+      await this.cloudinaryService.deleteImage(publicImageId);
+      imageUrl = (await this.cloudinaryService.uploadFile(poster, true)).url;
+    } else {
+      imageUrl = movieDto.poster;
+    }
     return await this.movieService.editMovie(movieDto, imageUrl, movieId);
   }
 
