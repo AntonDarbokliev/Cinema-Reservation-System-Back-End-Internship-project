@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Rating, Genre } from './dto';
-import mongoose from 'mongoose';
 import { Projection } from '../projection/projection.schema';
 
 @Schema({
@@ -45,8 +44,13 @@ export class Movie {
   @Prop({ type: Array(String), required: true })
   subtitles: string[];
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Projection' }] })
   projections: Projection[];
 }
 
 export const movieSchema = SchemaFactory.createForClass(Movie);
+
+movieSchema.virtual('projections', {
+  ref: 'Projection',
+  localField: '_id',
+  foreignField: 'movieId',
+});

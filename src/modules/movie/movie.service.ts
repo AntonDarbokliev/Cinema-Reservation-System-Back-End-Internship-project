@@ -14,7 +14,11 @@ export class MovieService {
   ) {}
 
   async getMovie(movieId: string) {
-    return await this.movieModel.findById(movieId);
+    const movie = await this.movieModel
+      .findById(movieId)
+      .populate('projections');
+
+    return movie;
   }
 
   async getMovies() {
