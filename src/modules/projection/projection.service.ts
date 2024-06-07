@@ -85,7 +85,7 @@ export class ProjectionService {
 
       const projectionStart = new Date(projection.startDate);
       projectionStart.setUTCHours(projectionStartHours, projectionStartMinutes);
-      const projectionLengthHours = Number(projection.movie.length) / 60;
+      const projectionLengthHours = Number(newProjectionMovie.length) / 60;
       const projectionEnd = new Date(
         projectionStart.getTime() + projectionLengthHours * 60 * 60 * 1000,
       );
