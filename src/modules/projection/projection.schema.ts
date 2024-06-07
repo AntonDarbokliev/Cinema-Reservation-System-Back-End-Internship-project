@@ -19,6 +19,9 @@ export enum ProjectionStatus {
   toJSON: {
     virtuals: true,
   },
+  toObject: {
+    virtuals: true,
+  },
 })
 export class Projection {
   @Prop({ type: String, required: true })
