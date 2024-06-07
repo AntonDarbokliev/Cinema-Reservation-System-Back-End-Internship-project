@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Movie } from './movie.schema';
 import { Model } from 'mongoose';
 import { CreateMovieDto } from './dto/createMovieDto';
 import { Cinema } from '../cinema/cinema.schema';
+import { ProjectionStatus } from '../projection/projection.schema';
 
 @Injectable()
 export class MovieService {
@@ -41,6 +42,16 @@ export class MovieService {
   }
 
   async deleteMovie(movieId: string) {
+    const movie = await this.movieModel
+      .findById(movieId)
+      .populate('projections');
+    for (const projection of movie.projections) {
+      if (projection.status !== ProjectionStatus.PROJECTION_ENDED) {
+        throw new BadRequestException(
+          "Projection/s that haven't ended yet found",
+        );
+      }
+    }
     return await this.movieModel.findByIdAndDelete(movieId);
   }
 }
