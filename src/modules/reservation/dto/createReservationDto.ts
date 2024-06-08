@@ -18,9 +18,17 @@ export class CreateReservationDto {
 
   @IsString()
   @IsNotEmpty()
-  projection: string;
+  projectionId: string;
 
   @IsString()
   @IsOptional()
   user?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  movieName: string;
+
+  @IsString()
+  @IsOptional()
+  moviePoster: string;
 }
