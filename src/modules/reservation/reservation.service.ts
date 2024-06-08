@@ -35,11 +35,11 @@ export class ReservationService {
 
   async createReservation(dto: CreateReservationDto) {
     const reservationProjection = await this.projectionService.getProjection(
-      dto.projection,
+      dto.projectionId,
     );
 
     const ticketsForProjection =
-      await this.ticketService.getTicketsForProjection(dto.projection);
+      await this.ticketService.getTicketsForProjection(dto.projectionId);
 
     if (
       ticketsForProjection.some(
