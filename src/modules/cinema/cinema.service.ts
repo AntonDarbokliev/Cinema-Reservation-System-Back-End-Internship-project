@@ -14,10 +14,7 @@ export class CinemaService {
   }
 
   async getCinema(id: string) {
-    return await this.cinemaModel
-      .findById(id)
-      .populate('movies')
-      .populate('projections');
+    return await this.cinemaModel.findById(id).populate('movies');
   }
 
   async createCinema(dto: CreateCinemaDto) {

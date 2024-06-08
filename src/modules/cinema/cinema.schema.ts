@@ -46,9 +46,3 @@ cinemaSchema.pre('updateOne', function (next) {
   }
   next();
 });
-
-cinemaSchema.virtual('projections', {
-  ref: 'Projection',
-  localField: '_id',
-  foreignField: 'cinemaId',
-});
