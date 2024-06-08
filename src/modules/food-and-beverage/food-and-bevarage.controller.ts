@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -59,6 +60,15 @@ export class FoodAndBeverageController {
 
     return await this.foodAndBeverageService.editFoodAndBeverage(
       { ...dto, image: imageUrl },
+      foodAndBeverageId,
+    );
+  }
+
+  @Delete(':foodAndBeverageId')
+  async deleteFoodAndBeverage(
+    @Param('foodAndBeverageId') foodAndBeverageId: string,
+  ) {
+    return await this.foodAndBeverageService.deleteFoodAndBeverage(
       foodAndBeverageId,
     );
   }

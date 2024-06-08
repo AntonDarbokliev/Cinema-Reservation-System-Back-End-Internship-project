@@ -25,4 +25,8 @@ export class FoodAndBeverageService {
       new: true,
     });
   }
+
+  async deleteFoodAndBeverage(foodBeverageId: string) {
+    return await this.foodModel.findByIdAndDelete(foodBeverageId);
+  }
 }
