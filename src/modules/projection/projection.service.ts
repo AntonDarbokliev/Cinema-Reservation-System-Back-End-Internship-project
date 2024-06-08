@@ -99,9 +99,6 @@ export class ProjectionService {
   async createProjection(dto: CreateProjectionDto) {
     await this.checkIfHallIsAvaibleForProjection(dto);
     const projection = await this.projectionModel.create(dto);
-    await this.movieModel.findByIdAndUpdate(dto.movieId, {
-      $push: { projections: projection },
-    });
 
     await this.cinemaModel.findByIdAndUpdate(dto.cinemaId, {
       $push: { projections: projection },
