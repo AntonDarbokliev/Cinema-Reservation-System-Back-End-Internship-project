@@ -57,10 +57,6 @@ export class Projection {
   @Prop({ type: Number, required: true })
   baseTicketPrice: number;
 
-  @Prop({
-    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Reservation' }],
-    default: [],
-  })
   reservations: Reservation[];
 
   status: ProjectionStatus;
@@ -72,6 +68,12 @@ export class Projection {
   tickets: Ticket[];
 }
 export const projectionSchema = SchemaFactory.createForClass(Projection);
+
+projectionSchema.virtual('reservations', {
+  ref: 'Reservation',
+  localField: '_id',
+  foreignField: 'projectionId',
+});
 
 projectionSchema
   .virtual('status', { foreignField: 'projectionId', localField: '_id' })
@@ -91,7 +93,6 @@ projectionSchema
     ).getTime();
 
     const currentTime = new Date();
-    console.log('Current Time before setHours: ', currentTime);
 
     const localOffset = Number(process.env.UTC_TIME_OFFSET);
     // const localOffset = Number(process.env.UTC_TIME_OFFSET);
