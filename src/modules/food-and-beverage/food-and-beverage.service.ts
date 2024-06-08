@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { FoodAndBeverage } from './food-and-beverage.schema';
 import { Model } from 'mongoose';
 import { CreateFoodAndBeverage } from './dto/createFoodAndBeverage';
+import { EditFoodAndBeverage } from './dto/editFoodAndBeverage';
 
 @Injectable()
 export class FoodAndBeverageService {
@@ -17,5 +18,11 @@ export class FoodAndBeverageService {
 
   async createFoodAndBeverage(dto: CreateFoodAndBeverage, imageUrl: string) {
     return await this.foodModel.create({ ...dto, image: imageUrl });
+  }
+
+  async editFoodAndBeverage(dto: EditFoodAndBeverage, foodBeverageId: string) {
+    return await this.foodModel.findByIdAndUpdate(foodBeverageId, dto, {
+      new: true,
+    });
   }
 }
