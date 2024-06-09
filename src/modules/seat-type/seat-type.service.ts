@@ -4,6 +4,7 @@ import { SeatType } from './seat-type.schema';
 import mongoose, { Model } from 'mongoose';
 import { CreateSeatTypeDto } from './dto/createSeatTypeDto';
 import { GetSeatTypeDto } from './dto/getSeatTypeDto';
+import { EditSeatTypeDto } from './dto/editSeatTypeDto';
 
 @Injectable()
 export class SeatTypeService {
@@ -30,5 +31,13 @@ export class SeatTypeService {
     };
     const seatTypes = await this.seatTypeModel.find({ cinema: cinemaId });
     return [blankSeatType, ...seatTypes];
+  }
+
+  async editSeatType(dto: EditSeatTypeDto, id: string) {
+    return await this.seatTypeModel.findByIdAndUpdate(id, dto, { new: true });
+  }
+
+  async deleteSeatType(id: string) {
+    return await this.seatTypeModel.findByIdAndDelete(id);
   }
 }
