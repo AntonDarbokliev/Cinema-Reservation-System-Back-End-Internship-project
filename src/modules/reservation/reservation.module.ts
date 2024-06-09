@@ -6,6 +6,7 @@ import { Reservation, reservationSchema } from './reservation.schema';
 import { ProjectionModule } from '../projection/projection.module';
 import { ReservationGateway } from './reservation.gateway';
 import { TicketModule } from '../ticket/ticket.module';
+import { Seat, seatSchema } from '../hall/hall.schema';
 
 @Module({
   providers: [ReservationService, ReservationGateway],
@@ -13,6 +14,7 @@ import { TicketModule } from '../ticket/ticket.module';
   imports: [
     MongooseModule.forFeature([
       { name: Reservation.name, schema: reservationSchema },
+      { name: Seat.name, schema: seatSchema },
     ]),
 
     ProjectionModule,
