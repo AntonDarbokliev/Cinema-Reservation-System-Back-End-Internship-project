@@ -1,11 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { Hall } from '../hall/hall.schema';
-// import { Cinema } from '../cinema/cinema.schema';
 import { ProjectionType } from './dto/projectionType';
 import { Reservation } from '../reservation/reservation.schema';
 import { Ticket } from '../ticket/ticket.schema';
-// import * as moment from 'moment';
 
 export enum ProjectionStatus {
   PROJECTION_SCHEDULED = 'Scheduled',
@@ -99,23 +97,6 @@ projectionSchema
     const currentTime = new Date();
 
     const localOffset = Number(process.env.UTC_TIME_OFFSET);
-    // const localOffset = Number(process.env.UTC_TIME_OFFSET);
-    // const [hours, minutes] = moment().format('HH:mm').split(':');
-    // currentTime.setHours(Number(hours));
-    // currentTime.setMinutes(Number(minutes));
-
-    console.log('----------------_------------------');
-
-    console.log('projectionStart', projectionStart);
-
-    console.log('projectionEnd', projectionEnd);
-
-    console.log(
-      'start - currentTime',
-      projectionStart.getTime() - currentTime.getTime(),
-    );
-
-    console.log('MarginMinutesMiliseconds', MarginMinutesMiliseconds);
 
     if (localOffset < 0) {
       currentTime.setHours(currentTime.getHours() + Math.abs(localOffset));
