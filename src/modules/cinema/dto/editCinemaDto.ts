@@ -26,10 +26,6 @@ export class EditCinemaDto {
   @IsOptional()
   numberOfHalls?: string;
 
-  // @IsArray()
-  // @IsOptional()
-  // hallPlans?: CreateHallPlan[];
-
   @IsArray()
   @IsOptional()
   menu?: CreateMenuItem[];
@@ -37,4 +33,9 @@ export class EditCinemaDto {
   @IsArray()
   @IsOptional()
   projections?: CreateProjectionDto[];
+
+  @IsOptional()
+  @Transform(({ value }) => parseInt(value))
+  @IsNumber()
+  minutesAwaitingStatusMargin?: number;
 }

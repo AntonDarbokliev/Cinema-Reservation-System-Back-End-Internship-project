@@ -27,6 +27,9 @@ export class Cinema {
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }] })
   movies: Movie[];
+
+  @Prop({ type: Number, default: 30 })
+  minutesAwaitingStatusMargin?: number;
 }
 
 export const cinemaSchema = SchemaFactory.createForClass(Cinema);

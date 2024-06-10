@@ -49,6 +49,9 @@ export class Projection {
   movieId: string;
 
   @Prop({ type: Number, required: true })
+  minutesAwaitingStatusMargin: number;
+
+  @Prop({ type: Number, required: true })
   movieLength: Date;
 
   @Prop({ type: String, required: true, enum: ProjectionType })
@@ -78,7 +81,8 @@ projectionSchema.virtual('reservations', {
 projectionSchema
   .virtual('status', { foreignField: 'projectionId', localField: '_id' })
   .get(function (this: Projection) {
-    const thirtyMinutesMilliseconds = 30 * 60 * 1000;
+    const MarginMinutesMiliseconds =
+      this.minutesAwaitingStatusMargin * 60 * 1000;
 
     const projectionStartComponents = this.startTime.split(':');
     const projectionStartHours = parseInt(projectionStartComponents[0], 10);
@@ -100,6 +104,19 @@ projectionSchema
     // currentTime.setHours(Number(hours));
     // currentTime.setMinutes(Number(minutes));
 
+    console.log('----------------_------------------');
+
+    console.log('projectionStart', projectionStart);
+
+    console.log('projectionEnd', projectionEnd);
+
+    console.log(
+      'start - currentTime',
+      projectionStart.getTime() - currentTime.getTime(),
+    );
+
+    console.log('MarginMinutesMiliseconds', MarginMinutesMiliseconds);
+
     if (localOffset < 0) {
       currentTime.setHours(currentTime.getHours() + Math.abs(localOffset));
     } else {
@@ -116,7 +133,7 @@ projectionSchema
       status = ProjectionStatus.PROJECTION_RUNNING;
     } else if (
       projectionStart.getTime() - currentTime.getTime() <=
-      thirtyMinutesMilliseconds
+      MarginMinutesMiliseconds
     ) {
       status = ProjectionStatus.PROJECTION_AWAITING;
     }
