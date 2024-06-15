@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -18,6 +19,7 @@ import { EditMovieDto } from './dto/editMovieDto';
 import { RolesGuard } from '../roles/guard';
 import { Role } from '../roles/role.enum';
 import { Roles } from '../roles/decorator/roles.decorator';
+import { Public } from '../auth/decorator';
 
 @Controller('movies')
 export class MovieController {
@@ -26,9 +28,13 @@ export class MovieController {
     private cloudinaryService: CloudinaryService,
   ) {}
 
-  @Get()
-  async getMovies() {
-    return await this.movieService.getMovies();
+  @Public()
+  @Get(':cinemaId')
+  async getMovies(
+    @Param('cinemaId') cinemaId: string,
+    @Query('projections') projections: string,
+  ) {
+    return await this.movieService.getMovies(cinemaId, projections);
   }
 
   @Get(':movieId')

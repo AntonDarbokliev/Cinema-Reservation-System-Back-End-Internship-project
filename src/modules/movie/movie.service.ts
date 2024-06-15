@@ -21,8 +21,10 @@ export class MovieService {
     return movie;
   }
 
-  async getMovies() {
-    return await this.movieModel.find();
+  async getMovies(cinemaId: string, projections?: string) {
+    return await this.movieModel
+      .find({ cinemaId })
+      .populate(projections == 'true' ? 'projections' : null);
   }
 
   async createMovie(dto: CreateMovieDto, imageUrl: string) {
