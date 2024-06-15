@@ -44,6 +44,9 @@ export class Movie {
   @Prop({ type: Array(String), required: true })
   subtitles: string[];
 
+  @Prop({ type: String })
+  cinemaId: string;
+
   projections: Projection[];
 }
 
