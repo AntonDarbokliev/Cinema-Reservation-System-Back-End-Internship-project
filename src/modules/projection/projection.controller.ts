@@ -14,6 +14,7 @@ import { EditProjectionDto } from './dto/editProjectionDto';
 import { RolesGuard } from '../roles/guard';
 import { Role } from '../roles/role.enum';
 import { Roles } from '../roles/decorator/roles.decorator';
+import { Public } from '../auth/decorator';
 
 @Controller('projections')
 export class ProjectionController {
@@ -29,6 +30,7 @@ export class ProjectionController {
     return await this.projectionService.getProjectionsForMovie(movieId);
   }
 
+  @Public()
   @Get('types')
   getTypesOfProjections() {
     return this.projectionService.getTypesOfProjections();

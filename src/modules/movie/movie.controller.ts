@@ -20,6 +20,7 @@ import { RolesGuard } from '../roles/guard';
 import { Role } from '../roles/role.enum';
 import { Roles } from '../roles/decorator/roles.decorator';
 import { Public } from '../auth/decorator';
+import { ProjectionType } from '../projection/dto/projectionType';
 
 @Controller('movies')
 export class MovieController {
@@ -34,8 +35,14 @@ export class MovieController {
     @Param('cinemaId') cinemaId: string,
     @Query('projections') projections: string,
     @Query('date') date: string,
+    @Query('projectionType') projectionType: ProjectionType,
   ) {
-    return await this.movieService.getMovies(cinemaId, projections, date);
+    return await this.movieService.getMovies(
+      cinemaId,
+      projections,
+      date,
+      projectionType,
+    );
   }
 
   @Get(':movieId')
