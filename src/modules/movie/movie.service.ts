@@ -26,19 +26,26 @@ export class MovieService {
     const moviesWithProjections = await this.movieModel
       .find({ cinemaId })
       .populate(projections == 'true' ? 'projections' : null);
-    if (date) {
-      moviesWithProjections.forEach(
-        (movie) =>
-          (movie.projections = movie.projections.filter((projection) => {
-            return (
-              projection.startDate.getDate() === dateToPass.getDate() &&
-              projection.startDate.getMonth() === dateToPass.getMonth() &&
-              projection.startDate.getFullYear() === dateToPass.getFullYear()
-            );
-          })),
-      );
-    }
+    this.filterOutMovieProjections(moviesWithProjections, dateToPass);
+
     return moviesWithProjections;
+  }
+
+  filterOutMovieProjections(moviesWithProjections: Movie[], date?: Date) {
+    moviesWithProjections.forEach((movie) => {
+      movie.projections = movie.projections.filter((projection) => {
+        const hasProjectionEnded =
+          projection.status === ProjectionStatus.PROJECTION_ENDED;
+        if (date) {
+          const isDateValid =
+            projection.startDate.getDate() === date.getDate() &&
+            projection.startDate.getMonth() === date.getMonth() &&
+            projection.startDate.getFullYear() === date.getFullYear();
+          return isDateValid && !hasProjectionEnded;
+        }
+        return !hasProjectionEnded;
+      });
+    });
   }
 
   async createMovie(dto: CreateMovieDto, imageUrl: string) {
