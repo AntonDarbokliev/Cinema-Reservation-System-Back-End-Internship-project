@@ -21,10 +21,24 @@ export class MovieService {
     return movie;
   }
 
-  async getMovies(cinemaId: string, projections?: string) {
-    return await this.movieModel
+  async getMovies(cinemaId: string, projections?: string, date?: string) {
+    const dateToPass = new Date(date);
+    const moviesWithProjections = await this.movieModel
       .find({ cinemaId })
       .populate(projections == 'true' ? 'projections' : null);
+    if (date) {
+      moviesWithProjections.forEach(
+        (movie) =>
+          (movie.projections = movie.projections.filter((projection) => {
+            return (
+              projection.startDate.getDate() === dateToPass.getDate() &&
+              projection.startDate.getMonth() === dateToPass.getMonth() &&
+              projection.startDate.getFullYear() === dateToPass.getFullYear()
+            );
+          })),
+      );
+    }
+    return moviesWithProjections;
   }
 
   async createMovie(dto: CreateMovieDto, imageUrl: string) {
