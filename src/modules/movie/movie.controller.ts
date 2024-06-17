@@ -29,12 +29,13 @@ export class MovieController {
   ) {}
 
   @Public()
-  @Get(':cinemaId')
-  async getMovies(
+  @Get('cinema/:cinemaId')
+  async getMoviesWithProjections(
     @Param('cinemaId') cinemaId: string,
     @Query('projections') projections: string,
+    @Query('date') date: string,
   ) {
-    return await this.movieService.getMovies(cinemaId, projections);
+    return await this.movieService.getMovies(cinemaId, projections, date);
   }
 
   @Get(':movieId')
