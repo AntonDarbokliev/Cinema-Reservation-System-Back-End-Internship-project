@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { CreateMovieDto } from './dto/createMovieDto';
 import { Cinema } from '../cinema/cinema.schema';
 import { ProjectionStatus } from '../projection/projection.schema';
+import { ProjectionType } from '../projection/dto/projectionType';
 
 @Injectable()
 export class MovieService {
@@ -21,26 +22,44 @@ export class MovieService {
     return movie;
   }
 
-  async getMovies(cinemaId: string, projections?: string, date?: string) {
+  async getMovies(
+    cinemaId: string,
+    projections?: string,
+    date?: string,
+    projectionType?: ProjectionType,
+  ) {
     const dateToPass = new Date(date);
     const moviesWithProjections = await this.movieModel
       .find({ cinemaId })
       .populate(projections == 'true' ? 'projections' : null);
-    this.filterOutMovieProjections(moviesWithProjections, dateToPass);
+    this.filterOutMovieProjections(
+      moviesWithProjections,
+      dateToPass,
+      projectionType,
+    );
 
     return moviesWithProjections;
   }
 
-  filterOutMovieProjections(moviesWithProjections: Movie[], date?: Date) {
+  filterOutMovieProjections(
+    moviesWithProjections: Movie[],
+    date?: Date,
+    projectionType?: ProjectionType,
+  ) {
     moviesWithProjections.forEach((movie) => {
       movie.projections = movie.projections.filter((projection) => {
         const hasProjectionEnded =
           projection.status === ProjectionStatus.PROJECTION_ENDED;
-        if (date) {
-          const isDateValid =
-            projection.startDate.getDate() === date.getDate() &&
-            projection.startDate.getMonth() === date.getMonth() &&
-            projection.startDate.getFullYear() === date.getFullYear();
+        const isDateValid =
+          projection.startDate.getDate() === date.getDate() &&
+          projection.startDate.getMonth() === date.getMonth() &&
+          projection.startDate.getFullYear() === date.getFullYear();
+        const doesProjectionTypeMatch =
+          projection.projectionType === projectionType;
+
+        if (projectionType && date) {
+          return isDateValid && !hasProjectionEnded && doesProjectionTypeMatch;
+        } else if (date) {
           return isDateValid && !hasProjectionEnded;
         }
         return !hasProjectionEnded;
