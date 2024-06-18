@@ -12,6 +12,10 @@ export class SeatTypeService {
     @InjectModel(SeatType.name) private seatTypeModel: Model<SeatType>,
   ) {}
 
+  async getSeatType(seatTypeId: string) {
+    return await this.seatTypeModel.findById(seatTypeId);
+  }
+
   async createSeatType(dto: CreateSeatTypeDto, image?: string) {
     const dataObj = { ...dto };
     if (image) dataObj['image'] = image;
