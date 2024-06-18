@@ -14,6 +14,7 @@ import { SeatTypeService } from './seat-type.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { EditSeatTypeDto } from './dto/editSeatTypeDto';
+import { Public } from '../auth/decorator';
 
 @Controller('seat-types')
 export class SeatTypeController {
@@ -36,9 +37,15 @@ export class SeatTypeController {
     return await this.seatTypeService.createSeatType(dto, imageUrl);
   }
 
+  @Public()
+  @Get(':seatTypeId')
+  async getSeatType(@Param('seatTypeId') seatTypeId: string) {
+    return await this.seatTypeService.getSeatType(seatTypeId);
+  }
+
   @Patch(':seatTypeId')
   @UseInterceptors(FileInterceptor('image'))
-  async editFoodAndBeverage(
+  async editSeatType(
     @Body() dto: EditSeatTypeDto,
     @UploadedFile() image: Express.Multer.File,
     @Param('seatTypeId') seatTypeId: string,
@@ -58,11 +65,11 @@ export class SeatTypeController {
   }
 
   @Delete(':seatTypeId')
-  async deleteFoodAndBeverage(@Param('seatTypeId') seatTypeId: string) {
+  async deleteSeatType(@Param('seatTypeId') seatTypeId: string) {
     return await this.seatTypeService.deleteSeatType(seatTypeId);
   }
 
-  @Get(':cinemaId')
+  @Get('cinema/:cinemaId')
   async getAllCinemaSeatTypes(@Param('cinemaId') cinemaId: string) {
     return await this.seatTypeService.getAllCinemaSeatTypes(cinemaId);
   }

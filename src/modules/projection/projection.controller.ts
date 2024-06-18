@@ -36,6 +36,7 @@ export class ProjectionController {
     return this.projectionService.getTypesOfProjections();
   }
 
+  @Public()
   @Get(':projectionId')
   async getProjection(@Param('projectionId') projectionId: string) {
     return await this.projectionService.getProjection(projectionId);

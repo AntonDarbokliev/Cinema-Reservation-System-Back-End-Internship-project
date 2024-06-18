@@ -45,6 +45,7 @@ export class MovieController {
     );
   }
 
+  @Public()
   @Get(':movieId')
   async getMovie(@Param('movieId') movieId: string) {
     return await this.movieService.getMovie(movieId);

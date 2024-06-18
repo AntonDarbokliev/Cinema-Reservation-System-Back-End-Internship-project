@@ -14,6 +14,7 @@ import { CreateFoodAndBeverage } from './dto/createFoodAndBeverage';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { EditFoodAndBeverage } from './dto/editFoodAndBeverage';
+import { Public } from '../auth/decorator';
 
 @Controller('food-and-beverages')
 export class FoodAndBeverageController {
@@ -22,6 +23,7 @@ export class FoodAndBeverageController {
     private cloudinaryService: CloudinaryService,
   ) {}
 
+  @Public()
   @Get(':cinemaId')
   async getAllFoodAndBeverage(@Param('cinemaId') cinemaId: string) {
     return await this.foodAndBeverageService.getAll(cinemaId);
