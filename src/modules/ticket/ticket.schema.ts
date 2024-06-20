@@ -3,6 +3,7 @@ import mongoose, { now } from 'mongoose';
 import { Projection } from '../projection/projection.schema';
 import { Reservation } from '../reservation/reservation.schema';
 import { Seat } from '../hall/hall.schema';
+import { FoodAndBeverage } from '../food-and-beverage/food-and-beverage.schema';
 
 @Schema()
 export class Ticket {
@@ -23,6 +24,9 @@ export class Ticket {
 
   @Prop({ type: Date, default: now() })
   bought: Date;
+
+  @Prop({ type: Array })
+  foodAndBeverages: FoodAndBeverage[];
 }
 
 export const ticketSchema = SchemaFactory.createForClass(Ticket);

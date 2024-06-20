@@ -1,5 +1,6 @@
 import { Transform } from 'class-transformer';
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { FoodAndBeverage } from 'src/modules/food-and-beverage/food-and-beverage.schema';
 import { Seat } from 'src/modules/hall/hall.schema';
 
 export class CreateTicketDto {
@@ -29,4 +30,7 @@ export class CreateTicketDto {
   @IsNotEmpty()
   @Transform(({ value }) => parseInt(value))
   price: number;
+
+  @IsOptional()
+  foodAndBeverages: FoodAndBeverage[];
 }

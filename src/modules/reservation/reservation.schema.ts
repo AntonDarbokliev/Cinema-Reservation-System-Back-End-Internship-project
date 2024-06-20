@@ -3,6 +3,7 @@ import mongoose, { now } from 'mongoose';
 import { Projection } from '../projection/projection.schema';
 import { Seat } from '../hall/hall.schema';
 import { ReservationStatus } from './dto/reservationStatus';
+import { FoodAndBeverage } from '../food-and-beverage/food-and-beverage.schema';
 
 @Schema({
   toObject: {
@@ -48,6 +49,9 @@ export class Reservation {
 
   @Prop({ type: String })
   moviePoster: string;
+
+  @Prop({ type: Array })
+  foodAndBeverages: FoodAndBeverage[];
 
   projection: Projection;
 }

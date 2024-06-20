@@ -40,6 +40,14 @@ export class TicketService {
       if (reservation.status !== ReservationStatus.ACTIVE) {
         throw new BadRequestException('Reservation has already been claimed');
       }
+
+      if (reservation.foodAndBeverages.length > 0) {
+        ticketDto.foodAndBeverages = [
+          ...ticketDto.foodAndBeverages,
+          ...reservation.foodAndBeverages,
+        ];
+      }
+
       this.reservationService.updateReservationStatus(
         reservation._id.toString(),
         ReservationStatus.COMPLETED,
@@ -62,6 +70,7 @@ export class TicketService {
     if (projection.status === ProjectionStatus.PROJECTION_ENDED) {
       throw new BadRequestException('Projection has already ended');
     }
+
     const ticket = await this.ticketModel.create(ticketDto);
 
     await this.projectionModel.findByIdAndUpdate(ticketDto.projection, {
