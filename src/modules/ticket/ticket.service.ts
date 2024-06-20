@@ -41,11 +41,16 @@ export class TicketService {
         throw new BadRequestException('Reservation has already been claimed');
       }
 
-      if (reservation.foodAndBeverages.length > 0) {
-        ticketDto.foodAndBeverages = [
-          ...ticketDto.foodAndBeverages,
-          ...reservation.foodAndBeverages,
-        ];
+      if (
+        reservation.foodAndBeverages &&
+        reservation.foodAndBeverages.length > 0
+      ) {
+        if (!ticketDto.foodAndBeverages) {
+          ticketDto.foodAndBeverages = [];
+        }
+        reservation.foodAndBeverages.forEach((item) => {
+          ticketDto.foodAndBeverages.push(item);
+        });
       }
 
       this.reservationService.updateReservationStatus(
