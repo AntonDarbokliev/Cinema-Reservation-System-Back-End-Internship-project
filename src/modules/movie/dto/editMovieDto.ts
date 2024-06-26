@@ -45,4 +45,8 @@ export class EditMovieDto {
   @IsOptional()
   @IsString()
   cinemaId: string;
+
+  @IsOptional()
+  @IsString()
+  poster: string;
 }

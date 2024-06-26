@@ -1,11 +1,14 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
   Post,
+  Query,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { MovieService } from './movie.service';
@@ -13,6 +16,11 @@ import { CreateMovieDto } from './dto/createMovieDto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { EditMovieDto } from './dto/editMovieDto';
+import { RolesGuard } from '../roles/guard';
+import { Role } from '../roles/role.enum';
+import { Roles } from '../roles/decorator/roles.decorator';
+import { Public } from '../auth/decorator';
+import { ProjectionType } from '../projection/dto/projectionType';
 
 @Controller('movies')
 export class MovieController {
@@ -21,11 +29,23 @@ export class MovieController {
     private cloudinaryService: CloudinaryService,
   ) {}
 
-  @Get()
-  async getMovies() {
-    return await this.movieService.getMovies();
+  @Public()
+  @Get('cinema/:cinemaId')
+  async getMoviesWithProjections(
+    @Param('cinemaId') cinemaId: string,
+    @Query('projections') projections: string,
+    @Query('date') date: string,
+    @Query('projectionType') projectionType: ProjectionType,
+  ) {
+    return await this.movieService.getMovies(
+      cinemaId,
+      projections,
+      date,
+      projectionType,
+    );
   }
 
+  @Public()
   @Get(':movieId')
   async getMovie(@Param('movieId') movieId: string) {
     return await this.movieService.getMovie(movieId);
@@ -43,6 +63,8 @@ export class MovieController {
     return await this.movieService.createMovie(movieDto, imageUrl);
   }
 
+  @UseGuards(RolesGuard)
+  @Roles([Role.ROOT_ADMIN])
   @Patch(':movieId')
   @UseInterceptors(FileInterceptor('poster'))
   async editMovie(
@@ -52,9 +74,20 @@ export class MovieController {
   ) {
     const movie = await this.movieService.getMovie(movieId);
     const publicImageId = this.cloudinaryService.getPublicId(movie.poster);
-    await this.cloudinaryService.deleteImage(publicImageId);
-    const imageUrl = (await this.cloudinaryService.uploadFile(poster, true))
-      .url;
+    let imageUrl: string;
+    if (!movieDto.poster) {
+      await this.cloudinaryService.deleteImage(publicImageId);
+      imageUrl = (await this.cloudinaryService.uploadFile(poster, true)).url;
+    } else {
+      imageUrl = movieDto.poster;
+    }
     return await this.movieService.editMovie(movieDto, imageUrl, movieId);
+  }
+
+  @UseGuards(RolesGuard)
+  @Roles([Role.ROOT_ADMIN])
+  @Delete(':movieId')
+  async deleteMovie(@Param('movieId') movieId: string) {
+    return await this.movieService.deleteMovie(movieId);
   }
 }

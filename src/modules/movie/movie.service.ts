@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Movie } from './movie.schema';
 import { Model } from 'mongoose';
 import { CreateMovieDto } from './dto/createMovieDto';
 import { Cinema } from '../cinema/cinema.schema';
+import { ProjectionStatus } from '../projection/projection.schema';
+import { ProjectionType } from '../projection/dto/projectionType';
 
 @Injectable()
 export class MovieService {
@@ -13,11 +15,60 @@ export class MovieService {
   ) {}
 
   async getMovie(movieId: string) {
-    return await this.movieModel.findById(movieId);
+    const movie = await this.movieModel
+      .findById(movieId)
+      .populate('projections');
+
+    return movie;
   }
 
-  async getMovies() {
-    return await this.movieModel.find();
+  async getMovies(
+    cinemaId: string,
+    projections?: string,
+    date?: string,
+    projectionType?: ProjectionType,
+  ) {
+    const dateToPass = new Date(date);
+    const moviesWithProjections = await this.movieModel
+      .find({ cinemaId })
+      .populate(projections == 'true' ? 'projections' : null);
+    const res = this.filterOutMovieProjections(
+      moviesWithProjections,
+      dateToPass,
+      projectionType,
+    );
+
+    return res;
+  }
+
+  filterOutMovieProjections(
+    moviesWithProjections: Movie[],
+    date?: Date,
+    projectionType?: ProjectionType,
+  ) {
+    const moviesWithProjectionsCpy = [...moviesWithProjections];
+
+    moviesWithProjectionsCpy.forEach((movie) => {
+      movie.projections = movie.projections.filter((projection) => {
+        const hasProjectionEnded =
+          projection.status === ProjectionStatus.PROJECTION_ENDED;
+        const isDateValid =
+          projection.startDate.getDate() === date.getDate() &&
+          projection.startDate.getMonth() === date.getMonth() &&
+          projection.startDate.getFullYear() === date.getFullYear();
+        const doesProjectionTypeMatch =
+          projection.projectionType === projectionType;
+
+        if (projectionType && date) {
+          return isDateValid && !hasProjectionEnded && doesProjectionTypeMatch;
+        } else if (date) {
+          return isDateValid && !hasProjectionEnded;
+        }
+        return !hasProjectionEnded;
+      });
+    });
+
+    return moviesWithProjectionsCpy;
   }
 
   async createMovie(dto: CreateMovieDto, imageUrl: string) {
@@ -38,5 +89,19 @@ export class MovieService {
       },
       { new: true },
     );
+  }
+
+  async deleteMovie(movieId: string) {
+    const movie = await this.movieModel
+      .findById(movieId)
+      .populate('projections');
+    for (const projection of movie.projections) {
+      if (projection.status !== ProjectionStatus.PROJECTION_ENDED) {
+        throw new BadRequestException(
+          "Projection/s that haven't ended yet found",
+        );
+      }
+    }
+    return await this.movieModel.findByIdAndDelete(movieId);
   }
 }

@@ -22,11 +22,11 @@ export class EditProjectionDto {
 
   @IsString()
   @IsOptional()
-  movie: string;
+  movieId: string;
 
   @IsString()
   @IsOptional()
-  cinema: string;
+  cinemaId: string;
 
   @IsString()
   @IsOptional()

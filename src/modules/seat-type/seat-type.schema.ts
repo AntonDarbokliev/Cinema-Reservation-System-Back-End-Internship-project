@@ -12,6 +12,9 @@ export class SeatType {
 
   @Prop({ type: Number, required: true })
   price: number;
+
+  @Prop({ type: String })
+  image?: string;
 }
 
 export const seatTypeSchema = SchemaFactory.createForClass(SeatType);

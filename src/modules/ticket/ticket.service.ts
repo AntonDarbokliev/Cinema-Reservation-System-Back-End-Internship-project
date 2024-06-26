@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  forwardRef,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Ticket } from './ticket.schema';
 import { Model } from 'mongoose';
@@ -12,6 +17,7 @@ import { ProjectionService } from '../projection/projection.service';
 export class TicketService {
   constructor(
     @InjectModel(Ticket.name) private ticketModel: Model<Ticket>,
+    @Inject(forwardRef(() => ReservationService))
     private reservationService: ReservationService,
     @InjectModel(Projection.name) private projectionModel: Model<Projection>,
     private projectionService: ProjectionService,
@@ -34,12 +40,24 @@ export class TicketService {
       if (reservation.status !== ReservationStatus.ACTIVE) {
         throw new BadRequestException('Reservation has already been claimed');
       }
+
+      if (
+        reservation.foodAndBeverages &&
+        reservation.foodAndBeverages.length > 0
+      ) {
+        if (!ticketDto.foodAndBeverages) {
+          ticketDto.foodAndBeverages = [];
+        }
+        reservation.foodAndBeverages.forEach((item) => {
+          ticketDto.foodAndBeverages.push(item);
+        });
+      }
+
       this.reservationService.updateReservationStatus(
         reservation._id.toString(),
         ReservationStatus.COMPLETED,
       );
     }
-    // const tickets = await this.getTicketsForProjection(ticketDto.projection);
     const projection = await this.projectionService.getProjection(
       ticketDto.projection,
     );
@@ -57,6 +75,7 @@ export class TicketService {
     if (projection.status === ProjectionStatus.PROJECTION_ENDED) {
       throw new BadRequestException('Projection has already ended');
     }
+
     const ticket = await this.ticketModel.create(ticketDto);
 
     await this.projectionModel.findByIdAndUpdate(ticketDto.projection, {

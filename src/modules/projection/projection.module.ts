@@ -6,6 +6,8 @@ import { ProjectionService } from './projection.service';
 import { Projection, projectionSchema } from './projection.schema';
 import { Cinema, cinemaSchema } from '../cinema/cinema.schema';
 import { HallModule } from '../hall/hall.module';
+import { RolesModule } from '../roles/roles.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -15,6 +17,8 @@ import { HallModule } from '../hall/hall.module';
       { name: Projection.name, schema: projectionSchema },
     ]),
     HallModule,
+    RolesModule,
+    JwtModule,
   ],
   controllers: [ProjectionController],
   providers: [ProjectionService],

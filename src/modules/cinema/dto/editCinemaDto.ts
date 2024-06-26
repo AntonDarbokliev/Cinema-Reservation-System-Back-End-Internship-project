@@ -5,8 +5,9 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { CreateMenuItem, CreateProjection } from './index';
+import { CreateMenuItem } from './index';
 import { Transform } from 'class-transformer';
+import { CreateProjectionDto } from 'src/modules/projection/dto/createProjectionDto';
 
 export class EditCinemaDto {
   @IsString()
@@ -25,15 +26,16 @@ export class EditCinemaDto {
   @IsOptional()
   numberOfHalls?: string;
 
-  // @IsArray()
-  // @IsOptional()
-  // hallPlans?: CreateHallPlan[];
-
   @IsArray()
   @IsOptional()
   menu?: CreateMenuItem[];
 
   @IsArray()
   @IsOptional()
-  projections?: CreateProjection[];
+  projections?: CreateProjectionDto[];
+
+  @IsOptional()
+  @Transform(({ value }) => parseInt(value))
+  @IsNumber()
+  minutesAwaitingStatusMargin?: number;
 }

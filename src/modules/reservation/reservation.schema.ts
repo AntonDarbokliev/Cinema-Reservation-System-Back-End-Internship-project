@@ -3,8 +3,16 @@ import mongoose, { now } from 'mongoose';
 import { Projection } from '../projection/projection.schema';
 import { Seat } from '../hall/hall.schema';
 import { ReservationStatus } from './dto/reservationStatus';
+import { FoodAndBeverage } from '../food-and-beverage/food-and-beverage.schema';
 
-@Schema()
+@Schema({
+  toObject: {
+    virtuals: true,
+  },
+  toJSON: {
+    virtuals: true,
+  },
+})
 export class Reservation {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Seat', required: true })
   seat: Seat;
@@ -20,10 +28,9 @@ export class Reservation {
 
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Projection',
     required: true,
   })
-  projection: Projection;
+  projectionId: Projection;
 
   @Prop({
     type: String,
@@ -36,6 +43,24 @@ export class Reservation {
 
   @Prop({ type: mongoose.Types.ObjectId })
   userId: string;
+
+  @Prop({ type: String, required: true })
+  movieName: string;
+
+  @Prop({ type: String })
+  moviePoster: string;
+
+  @Prop({ type: Array })
+  foodAndBeverages: FoodAndBeverage[];
+
+  projection: Projection;
 }
 
 export const reservationSchema = SchemaFactory.createForClass(Reservation);
+
+reservationSchema.virtual('projection', {
+  ref: 'Projection',
+  localField: 'projectionId',
+  foreignField: '_id',
+  justOne: true,
+});

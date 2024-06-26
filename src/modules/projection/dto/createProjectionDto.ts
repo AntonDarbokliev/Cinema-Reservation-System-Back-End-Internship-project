@@ -22,11 +22,20 @@ export class CreateProjectionDto {
 
   @IsString()
   @IsNotEmpty()
-  movie: string;
+  movieId: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @Transform(({ value }) => parseInt(value))
+  minutesAwaitingStatusMargin: number;
+
+  @IsNotEmpty()
+  @Transform(({ value }) => parseInt(value))
+  movieLength: string | number;
 
   @IsString()
   @IsNotEmpty()
-  cinema: string;
+  cinemaId: string;
 
   @IsString()
   @IsNotEmpty()
