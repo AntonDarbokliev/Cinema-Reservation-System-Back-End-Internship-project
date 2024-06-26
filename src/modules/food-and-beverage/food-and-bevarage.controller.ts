@@ -51,8 +51,6 @@ export class FoodAndBeverageController {
     @UploadedFile() image: Express.Multer.File,
     @Param('foodAndBeverageId') foodAndBeverageId: string,
   ) {
-    console.log(' Edit controller dto', dto);
-
     let imageUrl: string;
     if (!dto.image) {
       imageUrl = (await this.cloudinaryService.uploadFile(image, false)).url;

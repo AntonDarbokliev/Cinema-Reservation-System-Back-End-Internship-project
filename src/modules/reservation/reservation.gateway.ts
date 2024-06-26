@@ -7,7 +7,6 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
-// import { Reservation } from './reservation.schema';
 import { Ticket } from '../ticket/ticket.schema';
 import { Seat } from '../hall/hall.schema';
 import { GetReservation } from './dto/getReservationDto';
@@ -45,7 +44,11 @@ let connectedClients = 0;
 
 @WebSocketGateway({
   cors: {
-    origin: ['http://localhost:5173', 'http://localhost:5174'],
+    origin: [
+      'http://localhost:5173',
+      'http://localhost:5174',
+      'http://localhost:4200',
+    ],
   },
 })
 export class ReservationGateway

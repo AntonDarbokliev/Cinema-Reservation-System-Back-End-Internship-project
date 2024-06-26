@@ -32,13 +32,13 @@ export class MovieService {
     const moviesWithProjections = await this.movieModel
       .find({ cinemaId })
       .populate(projections == 'true' ? 'projections' : null);
-    this.filterOutMovieProjections(
+    const res = this.filterOutMovieProjections(
       moviesWithProjections,
       dateToPass,
       projectionType,
     );
 
-    return moviesWithProjections;
+    return res;
   }
 
   filterOutMovieProjections(
@@ -46,7 +46,9 @@ export class MovieService {
     date?: Date,
     projectionType?: ProjectionType,
   ) {
-    moviesWithProjections.forEach((movie) => {
+    const moviesWithProjectionsCpy = [...moviesWithProjections];
+
+    moviesWithProjectionsCpy.forEach((movie) => {
       movie.projections = movie.projections.filter((projection) => {
         const hasProjectionEnded =
           projection.status === ProjectionStatus.PROJECTION_ENDED;
@@ -65,6 +67,8 @@ export class MovieService {
         return !hasProjectionEnded;
       });
     });
+
+    return moviesWithProjectionsCpy;
   }
 
   async createMovie(dto: CreateMovieDto, imageUrl: string) {
