@@ -1,7 +1,7 @@
 
 ## Description
 
-A scalable and efficient backend system for managing cinema reservations, built with NestJS and TypeScript. Features include user authentication, movie management, and a dynamic booking system for movie screenings. Ideal for cinema operators looking for a flexible solution to streamline operations.
+A booking system, developed during my internship at Vention.
 
 ### Note: The front-end is in a seperate repository:
 https://github.com/AntonDarbokliev/Cinema-Reservation-System-Front-End-Admin-Part-Internship-project
