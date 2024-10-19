@@ -6,7 +6,7 @@ A booking system, developed during my internship at Vention.
 ### Note: The front-end is in a seperate repository:
 https://github.com/AntonDarbokliev/Cinema-Reservation-System-Front-End-Admin-Part-Internship-project
 
-# Main Features 
+# Main Features 🛠️
 ## Booking seats system: 
 - Utilizes websockets to dymaically indicate and lock a selected seat for other users
 - Intuitive layout system to chooise a seat
